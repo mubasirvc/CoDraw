@@ -1,0 +1,71 @@
+import { CANVAS_SIZE } from "@/common/constants";
+import useViewPortSize from "@/common/hooks/useViewPortSize";
+import { MotionValue, useMotionValue, motion } from "framer-motion";
+import { Dispatch, forwardRef, SetStateAction, useEffect, useRef } from "react";
+
+const MiniMap = forwardRef<HTMLCanvasElement, {
+  x: MotionValue<number>,
+  y: MotionValue<number>,
+  dragging: boolean,
+  setMovedMiniMap: Dispatch<SetStateAction<boolean>>
+
+}>(({ x, y, dragging, setMovedMiniMap }, ref) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const { width, height } = useViewPortSize()
+
+  const minX = useMotionValue(0)
+  const minY = useMotionValue(0)
+
+  useEffect(() => {
+    minX.onChange(newX => {
+      if (!dragging) x.set(-newX * 10)
+    })
+    minY.onChange(newY => {
+      if (!dragging) x.set(-newY * 10)
+    })
+
+    return () => {
+      minX.clearListeners()
+      minY.clearListeners()
+    }
+  }, [x, y, minX, minY, dragging])
+
+  return (
+    <div className="absolute right-10 top-10 z-50 bg-zinc-400"
+      ref={containerRef}
+      style={{
+        width: CANVAS_SIZE.width / 10,
+        height: CANVAS_SIZE.height / 10,
+      }}
+    >
+      <canvas
+        ref={ref}
+        width={CANVAS_SIZE.width}
+        height={CANVAS_SIZE.height}
+        className="h-full w-full"
+      />
+      <motion.div
+        className="absolute top-0 left-0 cursor-grab border-2 border-red-200"
+        style={{
+          width: width / 10,
+          height: height / 10,
+          x: minX,
+          y: minY,
+        }}
+        animate={{ x: -x.get() / 10, y: -y.get() / 10 }}
+        transition={{duration: 0.1}}
+        drag
+        dragConstraints={containerRef}
+        dragElastic={0}
+        dragTransition={{ power: 0, timeConstant: 0 }}
+        onDragStart={() => setMovedMiniMap((prev) => !prev)}
+        onDragEnd={() => setMovedMiniMap((prev: boolean) => !prev)}
+      >
+      </motion.div>
+    </div>
+  )
+})
+
+MiniMap.displayName = "MiniMap";
+
+export default MiniMap
