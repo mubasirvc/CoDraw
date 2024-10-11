@@ -2,14 +2,14 @@ import { CANVAS_SIZE } from "@/common/constants";
 import useViewPortSize from "@/common/hooks/useViewPortSize";
 import { MotionValue, useMotionValue, motion } from "framer-motion";
 import { Dispatch, forwardRef, SetStateAction, useEffect, useRef } from "react";
+import { useBoardPosition } from "../hooks/useBoardPosition";
 
 const MiniMap = forwardRef<HTMLCanvasElement, {
-  x: MotionValue<number>,
-  y: MotionValue<number>,
   dragging: boolean,
   setMovedMiniMap: Dispatch<SetStateAction<boolean>>
 
-}>(({ x, y, dragging, setMovedMiniMap }, ref) => {
+}>(({ dragging, setMovedMiniMap }, ref) => {
+  const { x, y } = useBoardPosition()
   const containerRef = useRef<HTMLDivElement>(null)
   const { width, height } = useViewPortSize()
 
@@ -17,11 +17,11 @@ const MiniMap = forwardRef<HTMLCanvasElement, {
   const minY = useMotionValue(0)
 
   useEffect(() => {
-    minX.onChange(newX => {
+    minX.on('change', newX => {
       if (!dragging) x.set(-newX * 10)
     })
-    minY.onChange(newY => {
-      if (!dragging) x.set(-newY * 10)
+    minX.on('change', newY => {
+      if (!dragging) y.set(-newY * 10)
     })
 
     return () => {
@@ -53,7 +53,7 @@ const MiniMap = forwardRef<HTMLCanvasElement, {
           y: minY,
         }}
         animate={{ x: -x.get() / 10, y: -y.get() / 10 }}
-        transition={{duration: 0.1}}
+        transition={{ duration: 0.1 }}
         drag
         dragConstraints={containerRef}
         dragElastic={0}

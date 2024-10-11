@@ -78,7 +78,7 @@ const Canvas = () => {
     }
   }, [drawing, ctx])
   return (
-    <div className='h-full w-full overflow-hidden'>
+    <div className='relative h-full w-full overflow-hidden'>
       <motion.canvas
         className={`bg-zinc-300 ${draging && 'cursor-move'}`}
         ref={canvasRef}
@@ -104,8 +104,6 @@ const Canvas = () => {
       />
       <MiniMap
         ref={minCanvasRef}
-        x={x}
-        y={y}
         dragging={draging}
         setMovedMiniMap={setmovedMiniMap}
       />
