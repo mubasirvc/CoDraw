@@ -29,7 +29,13 @@ nextApp.prepare().then(async () => {
 
     socket.on("draw", (move, option) => {
       console.log('drawing');
-      socket.broadcast.emit("socket_draw", move, option)
+      socket.broadcast.emit("user_draw", move, option, socket.id)
+    })
+
+    socket.on("undo", () => {
+      console.log("undo");
+      socket.broadcast.emit("user_undo", socket.id)
+      
     })
 
     socket.on("mouse_move", (x, y) => {

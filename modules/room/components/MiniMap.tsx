@@ -53,7 +53,7 @@ const MiniMap = forwardRef<HTMLCanvasElement, {
           y: minY,
         }}
         animate={{ x: -x.get() / 10, y: -y.get() / 10 }}
-        transition={{ duration: 0.1 }}
+        transition={{ duration: 0 }}
         drag
         dragConstraints={containerRef}
         dragElastic={0}
