@@ -6,7 +6,7 @@ import { useKeyPressEvent } from 'react-use'
 import { useDraw, useSocketDraw } from '../hooks/canvas.hooks'
 import { socket } from '@/common/lib/socket'
 import { CtxOptions } from '@/common/types/socketTypes'
-import { drawFromSocket } from '../helpers/canvas.helper'
+import { handleMove } from '../helpers/canvas.helper'
 import MiniMap from './MiniMap'
 import { useBoardPosition } from '../hooks/useBoardPosition'
 
@@ -57,7 +57,7 @@ const Canvas = () => {
     }
   }, [draging])
 
-  useSocketDraw(ctx, copyCanvasToSmall)
+  useSocketDraw(ctx, drawing, copyCanvasToSmall)
 
   return (
     <div className='relative h-full w-full overflow-hidden'>

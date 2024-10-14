@@ -22,7 +22,7 @@ const MousePosition = () => {
   return (
     <motion.div
       ref={ref}
-      className='absolute top-0 left-0 z-50 select-none pointer-events-none'
+      className='absolute top-0 left-0 z-50 pointer-events-none'
       animate={{ x: docX + 15, y: docY + 15 }}
       transition={{ duration: 0.05, ease: "linear" }}
     >

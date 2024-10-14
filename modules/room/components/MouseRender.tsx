@@ -1,6 +1,5 @@
-import { socket } from '@/common/lib/socket';
-import React, { useEffect, useState } from 'react'
-import SocketMouse from './SocketMouse';
+import React from 'react'
+import UserMouse from './UserMouse';
 import { useUserIds } from '@/common/recoil/users';
 
 const MouseRender = () => {
@@ -9,7 +8,7 @@ const MouseRender = () => {
   return (
     <>
       {userIds.map((userId) => {
-        return <SocketMouse userId={userId} key={userId} />
+        return <UserMouse userId={userId} key={userId} />
       })}
     </>
   )

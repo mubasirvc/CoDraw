@@ -1,14 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { socket } from "@/common/lib/socket";
 import { useOptions } from "@/common/recoil/options";
-import { drawUndo } from "../helpers/canvas.helper";
+import { drawUndo, handleMove } from "../helpers/canvas.helper";
 import usersAtom, { useUsers } from "@/common/recoil/users";
 import { useBoardPosition } from "./useBoardPosition";
 import { getPos } from "@/common/lib/getPos";
 import { useSetRecoilState } from "recoil";
+import { Move } from "@/common/types/socketTypes";
 
 let moves: [number, number][] = [];
-const savedMoves: [number, number][][] = [];
+const savedMoves: Move[] = [];
 
 export const useDraw = (
   ctx: CanvasRenderingContext2D | undefined,
@@ -69,9 +70,14 @@ export const useDraw = (
 
     setDrawing(false);
     ctx.closePath();
-    savedMoves.push(moves);
 
-    socket.emit("draw", moves, options);
+    const move: Move = {
+      path: moves,
+      options,
+    };
+    savedMoves.push(move);
+
+    socket.emit("draw", move);
 
     moves = [];
     handleEnd();
@@ -97,36 +103,48 @@ export const useDraw = (
 
 export const useSocketDraw = (
   ctx: CanvasRenderingContext2D | undefined,
+  drawing: boolean,
   handleEnd: () => void
 ) => {
   const setUsers = useSetRecoilState(usersAtom);
 
   useEffect(() => {
-    socket.on("user_draw", (newMoves, options, userId) => {
-      if (ctx) {
-        ctx.lineWidth = options.lineWidth;
-        ctx.strokeStyle = options.lineColor;
-
-        ctx.beginPath();
-
-        newMoves.forEach(([x, y]) => {
-          ctx.lineTo(x, y);
-        });
-
-        ctx.stroke();
-        ctx.closePath();
-
-        handleEnd();
+    let moveToDrawLater: Move | undefined;
+    let userIdLater = "";
+    socket.on("user_draw", (move, userId) => {
+      if (ctx && !drawing) {
+        handleMove(move, ctx);
 
         setUsers((prevUsers) => {
           const newUsers = { ...prevUsers };
-          if (newUsers[userId])
-            newUsers[userId] = [...newUsers[userId], newMoves];
+          if (newUsers[userId]) newUsers[userId] = [...newUsers[userId], move];
           return newUsers;
         });
+      } else {
+        moveToDrawLater = move;
+        userIdLater = userId;
       }
     });
 
+    return () => {
+      socket.off("user_draw");
+      if (moveToDrawLater && userIdLater && ctx) {
+        handleMove(moveToDrawLater, ctx);
+        handleEnd();
+        setUsers((prevUsers) => {
+          const newUsers = { ...prevUsers };
+          newUsers[userIdLater] = [
+            ...newUsers[userIdLater],
+            moveToDrawLater as Move,
+          ];
+
+          return newUsers;
+        });
+      }
+    };
+  }, [ctx, handleEnd, setUsers, drawing]);
+
+  useEffect(() => {
     socket.on("user_undo", (userId) => {
       setUsers((prevUsers) => {
         const newUsers = { ...prevUsers };
@@ -142,7 +160,6 @@ export const useSocketDraw = (
     });
 
     return () => {
-      socket.off("user_draw");
       socket.off("user_undo");
     };
   }, [ctx, handleEnd, setUsers]);
