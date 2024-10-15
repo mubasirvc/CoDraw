@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { socket } from "@/common/lib/socket";
-import { useOptions } from "@/common/recoil/options";
 import { drawUndo, handleMove } from "../helpers/canvas.helper";
 import usersAtom, { useUsers } from "@/common/recoil/users";
 import { useBoardPosition } from "./useBoardPosition";
 import { getPos } from "@/common/lib/getPos";
 import { useSetRecoilState } from "recoil";
 import { Move } from "@/common/types/socketTypes";
+import { useOptionsValue } from "@/common/recoil/options/options.hooks";
 
 let moves: [number, number][] = [];
 const savedMoves: Move[] = [];
@@ -17,7 +17,7 @@ export const useDraw = (
   handleEnd: () => void
 ) => {
   const users = useUsers();
-  const options = useOptions();
+  const options = useOptionsValue();
   const [drawing, setDrawing] = useState(false);
 
   const { x: movedX, y: movedY } = useBoardPosition();
