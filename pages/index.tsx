@@ -1,7 +1,5 @@
-import Room from "@/modules/room/components/Room";
+import Home from "@/modules/home/components/home";
 
-export default function Home() {
-  return (
-    <Room />
-  );
+export default function HomePage() {
+  return <Home />
 }
