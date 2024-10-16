@@ -5,7 +5,7 @@ import usersAtom, { useUsers } from "@/common/recoil/users";
 import { useBoardPosition } from "./useBoardPosition";
 import { getPos } from "@/common/lib/getPos";
 import { useSetRecoilState } from "recoil";
-import { Move } from "@/common/types/socketTypes";
+import { Move, Room } from "@/common/types/socketTypes";
 import { useOptionsValue } from "@/common/recoil/options/options.hooks";
 
 let moves: [number, number][] = [];
@@ -109,6 +109,23 @@ export const useSocketDraw = (
   const setUsers = useSetRecoilState(usersAtom);
 
   useEffect(() => {
+    socket.on("joined", (roomData) => {
+      const room: Room = new Map(JSON.parse(roomData));
+
+      room?.forEach((userMoves, userId) => {
+        if (ctx) userMoves?.forEach((move) => handleMove(move, ctx));
+        handleEnd();
+
+        setUsers((prev) => ({ ...prev, [userId]: userMoves }));
+      });
+    });
+
+    return () => {
+      socket.off("joined");
+    };
+  }, [ctx, handleEnd, setUsers]);
+
+  useEffect(() => {
     let moveToDrawLater: Move | undefined;
     let userIdLater = "";
     socket.on("user_draw", (move, userId) => {
@@ -133,10 +150,11 @@ export const useSocketDraw = (
         handleEnd();
         setUsers((prevUsers) => {
           const newUsers = { ...prevUsers };
-          newUsers[userIdLater] = [
-            ...newUsers[userIdLater],
-            moveToDrawLater as Move,
-          ];
+          if (newUsers[userIdLater])
+            newUsers[userIdLater] = [
+              ...newUsers[userIdLater],
+              moveToDrawLater as Move,
+            ];
 
           return newUsers;
         });
