@@ -36,7 +36,7 @@ const UserMouse = ({ userId }: { userId: string }) => {
     <motion.div
       className={`absolute top-0 left-0 text-blue-800 pointer-events-none ${pos.x === -1 && "hidden"}`}
       animate={{ x: pos.x + x, y: pos.y + y }}
-      transition={{ duration: 0.3, ease: 'linear' }}
+      transition={{ duration: 0.1, ease: 'linear' }}
     >
       <BsCursorFill className='-rotate-90' />
     </motion.div>

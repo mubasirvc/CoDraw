@@ -5,13 +5,16 @@ export interface CtxOptions {
 
 export interface Move {
   path: [number, number][];
-  options: CtxOptions
+  options: CtxOptions;
 }
 
-export type Room = Map<string, Move[]>;
+export type Room = {
+  users: Map<string, Move[]>;
+  drawed: Move[];
+};
 
 export interface ServerToClientEvents {
-  room: (room: string) => void;
+  room: (room: Room, usersToParse: string) => void;
   created: (roomId: string) => void;
   joined: (roomId: string, failed?: boolean) => void;
   user_draw: (move: Move, userId: string) => void;
@@ -23,7 +26,7 @@ export interface ServerToClientEvents {
 }
 
 export interface ClientToServerEvents {
-  draw: (move: Move,) => void;
+  draw: (move: Move) => void;
   mouse_move: (x: number, y: number) => void;
   undo: () => void;
   create_room: () => void;
