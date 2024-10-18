@@ -13,6 +13,13 @@ export type Room = {
   drawed: Move[];
 };
 
+export interface ClientRoom {
+  id: string,
+  users: Map<string, Move[]>,
+  movesWithoutUser: Move[],
+  myMoves: Move[],
+}
+
 export interface ServerToClientEvents {
   room: (room: Room, usersToParse: string) => void;
   created: (roomId: string) => void;

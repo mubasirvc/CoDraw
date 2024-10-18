@@ -1,16 +1,18 @@
 import { CANVAS_SIZE } from '@/common/constants'
 import useViewPortSize from '@/common/hooks/useViewPortSize'
-import { useMotionValue, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import React, { useEffect, useRef, useState } from 'react'
 import { useKeyPressEvent } from 'react-use'
-import { useDraw, useSocketDraw } from '../hooks/canvas.hooks'
 import { socket } from '@/common/lib/socket'
-import { CtxOptions } from '@/common/types/socketTypes'
-import { handleMove } from '../helpers/canvas.helper'
+import { drawAllMoves } from '../helpers/canvas.helper'
 import MiniMap from './MiniMap'
 import { useBoardPosition } from '../hooks/useBoardPosition'
+import { useRoom } from '@/common/recoil/room'
+import { useSocketDraw } from '../hooks/useSocketDraw'
+import { useDraw } from '../hooks/useDraw'
 
 const Canvas = () => {
+  const room = useRoom()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const minCanvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -38,7 +40,8 @@ const Canvas = () => {
     }
   }
 
-  const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, handleUndo } = useDraw(ctx, draging, copyCanvasToSmall)
+  const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, handleUndo } = useDraw(ctx, draging)
+  useSocketDraw(ctx, drawing)
 
   useEffect(() => {
     const newCtx = canvasRef.current?.getContext("2d")
@@ -57,7 +60,17 @@ const Canvas = () => {
     }
   }, [draging])
 
-  useSocketDraw(ctx, drawing, copyCanvasToSmall)
+  useEffect(() => {
+    if(ctx) socket.emit("joined_room")
+  }, [ctx])
+
+  useEffect(() => {
+    if(ctx){
+      drawAllMoves(ctx, room)
+      copyCanvasToSmall()
+    }
+  }, [ctx, room])
+
 
   return (
     <div className='relative h-full w-full overflow-hidden'>
