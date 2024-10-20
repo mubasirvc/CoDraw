@@ -15,20 +15,23 @@ const Home = () => {
       router.push(roomId)
     })
 
-    socket.on("joined", (roomId, isFailed) => {
+    const handlelJoinedRoom = (roomId: string, isFailed?: boolean) => {
       if (!isFailed) {
         setAtomRoomId(roomId)
         router.push(roomId)
       }
+      //handle modal for room not found
       else console.log('failed to  join room');
-    })
+    }
+
+    socket.on("joined", handlelJoinedRoom)
 
     return () => {
       socket.off("created")
-      socket.off("joined")
+      socket.off("joined", handlelJoinedRoom)
     }
 
-  }, [router, setAtomRoomId])
+  }, [router, setAtomRoomId, router, roomId])
 
   const handleCreateRoom = () => {
     socket.emit("create_room")

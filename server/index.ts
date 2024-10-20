@@ -45,6 +45,8 @@ nextApp.prepare().then(async () => {
 
   const leavRoom = (roomId: string, socketId: string) => {
     const room = rooms.get(roomId);
+    if(!room) return
+    
     const userMoves = room?.users.get(socketId);
     if (userMoves) room?.drawed.push(...userMoves);
     room?.users.delete(socketId);
