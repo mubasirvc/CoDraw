@@ -31,50 +31,56 @@ export const useSetRoomId = () => {
 };
 
 export const useSetUsers = () => {
-  const setUsers = useSetRecoilState(roomAtom);
+  const setRoom = useSetRecoilState(roomAtom);
 
-  const handleAddUser = (userId: string) => {
-    setUsers((prev) => {
-      const newUsers = prev.users;
-      newUsers.set(userId, []);
-      return { ...prev, users: newUsers };
+  const handleAddUser = (userId: string, username: string) => {
+    setRoom((prev) => {
+      const { users: newUsers, usersMoves: newUserMoves } = prev;
+
+      newUsers.set(userId, username);
+      newUserMoves.set(userId, []);
+
+      return { ...prev, users: newUsers, usersMoves: newUserMoves };
     });
   };
 
   const handleRemoveUser = (userId: string) => {
-    setUsers((prev) => {
-      const newUsers = prev.users;
-      const userMoves = newUsers.get(userId);
+    setRoom((prev) => {
+      const { users: newUsers, usersMoves: newUserMoves } = prev;
+
+      const userMoves = newUserMoves.get(userId);
       newUsers.delete(userId);
+      newUserMoves.delete(userId);
 
       return {
         ...prev,
         users: newUsers,
+        usersMoves: newUserMoves,
         movesWithoutUser: [...prev.movesWithoutUser, ...(userMoves || [])],
       };
     });
   };
 
   const handleAddMoveToUser = (userId: string, moves: Move) => {
-    setUsers((prev) => {
-      const newUsers = prev.users;
-      const oldMoves = prev.users.get(userId);
+    setRoom((prev) => {
+      const newUserMoves = prev.usersMoves
+      const oldMoves = prev.usersMoves.get(userId);
 
-      newUsers.set(userId, [...(oldMoves || []), moves]);
+      newUserMoves.set(userId, [...(oldMoves || []), moves]);
 
-      return { ...prev, users: newUsers };
+      return { ...prev, usersMoves: newUserMoves };
     });
   };
 
   const handleRemoveMoveFromUser = (userId: string) => {
-    setUsers((prev) => {
-      const newUsers = prev.users;
-      const oldMoves = prev.users.get(userId);
+    setRoom((prev) => {
+      const newUserMoves = prev.usersMoves
+      const oldMoves = prev.usersMoves.get(userId);
       oldMoves?.pop();
 
-      newUsers.set(userId, oldMoves || []);
+      newUserMoves.set(userId, oldMoves || []);
 
-      return { ...prev, users: newUsers };
+      return { ...prev, usersMoves: newUserMoves };
     });
   };
 

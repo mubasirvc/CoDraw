@@ -5,6 +5,7 @@ import React, { FormEvent, useEffect, useState } from 'react'
 
 const Home = () => {
   const [roomId, setRoomId] = useState('')
+  const [username, setUsername] = useState('')
   const setAtomRoomId = useSetRoomId()
 
   const router = useRouter()
@@ -34,13 +35,13 @@ const Home = () => {
   }, [router, setAtomRoomId, router, roomId])
 
   const handleCreateRoom = () => {
-    socket.emit("create_room")
+    socket.emit("create_room", username)
   }
 
   const handleJoinRoom = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    socket.emit("join_room", roomId)
+    socket.emit("join_room", roomId, username)
   }
 
   return (
@@ -49,8 +50,21 @@ const Home = () => {
         CoDraw
       </h1>
       <h3 className='text-2xl'> Real time whiteboard</h3>
+      <div className='mt-10 flex flex-col gap-2'>
+      <label htmlFor="username" className='self-start font-bold leading-tight'>
+          Enter Username
+        </label>
+        <input
+          className='rounded-xl border p-5 py-1'
+          id='username'
+          placeholder='Enter username'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          type="text"
+        />
+      </div>
 
-      <form className='mt-8 flex flex-col items-center gap-2'
+      <form className='flex flex-col items-center gap-3'
         onSubmit={handleJoinRoom}>
         <label htmlFor="room-id" className='self-start font-bold leading-tight'>
           Enter room id
@@ -65,6 +79,7 @@ const Home = () => {
         />
         <button type='submit'> Join</button>
       </form>
+      <p className='my-3'>or</p>
       <div className='mt-8 flex flex-col items-center gap-2'>
         <h5 className='self-start font-bold leading-tight '>
           Create new room

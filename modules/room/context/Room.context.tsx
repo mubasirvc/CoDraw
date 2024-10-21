@@ -21,17 +21,19 @@ const RoomContextProvider = ({ children }: { children: ReactNode }) => {
   const y = useMotionValue(0)
 
   useEffect(() => {
-    socket.on("room", (room, usersToParse) => {
-      const users = new Map<string, Move[]>(JSON.parse(usersToParse))
+    socket.on("room", (room, usersMovesoParse, usersToParse) => {
+      const usersMoves = new Map<string, Move[]>(JSON.parse(usersMovesoParse))
+      const users = new Map<string, string>(JSON.parse(usersToParse))
 
       setRoom(prev => ({
         ...prev,
         users,
+        usersToParse,
         movesWithoutUser: room.drawed,
       }))
     })
 
-    socket.on("new_user", newUser => handleAddUser(newUser))
+    socket.on("new_user", (userId, username) => handleAddUser(userId, username))
 
     socket.on("user_disconnected", userId => handleRemoveUser(userId))
 
