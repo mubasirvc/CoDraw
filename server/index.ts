@@ -105,7 +105,6 @@ nextApp.prepare().then(async () => {
 
       const room = rooms.get(roomId);
       if (!room) return;
-console.log('loggggggggggggg', room.usersMoves,  room.drawed, room.users, 'loggggggggggggg');
 
       io.to(socket.id).emit(
         "room",

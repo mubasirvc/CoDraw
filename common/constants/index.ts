@@ -4,3 +4,21 @@ export const CANVAS_SIZE = {
 }
 
 export const DEFAULT_EASE = [0.6, 0.01, 0.05, 0.9];
+
+
+const COLORS = {
+  SUNSET_ORANGE: "#FF4500",
+  ELECTRIC_VIOLET: "#8F00FF",
+  LIME_PUNCH: "#DFFF00",
+  AQUA_MARINE: "#7FFFD4",
+  ROYAL_FUCHSIA: "#CA2C92",
+  CERULEAN_BLUE: "#007BA7",
+  FLAME: "#E25822",
+  MINT_LEAF: "#98FF98",
+  VIVID_TANGERINE: "#FF8373",
+  RASPBERRY_ROSE: "#B3446C"
+};
+
+
+
+export const COLORS_ARRAY = [...Object.values(COLORS)]

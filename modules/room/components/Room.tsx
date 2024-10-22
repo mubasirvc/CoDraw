@@ -6,6 +6,7 @@ import MouseRender from './MouseRender'
 import { useRoom } from '@/common/recoil/room'
 import Toolbar from './toolbar/Toolbar'
 import NameInput from './NameInput'
+import UsersList from './UsersList'
 
 const Room = () => {
   const room = useRoom()
@@ -15,6 +16,7 @@ const Room = () => {
   return (
     <RoomContextProvider>
       <div className='relative h-full w-full overflow-hidden'>
+        <UsersList />
         <Toolbar />
         <Canvas />
         <MousePosition />

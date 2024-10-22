@@ -1,11 +1,13 @@
 export interface CtxOptions {
   lineWidth: number;
   lineColor: string;
+  erase: boolean;
 }
 
 export interface Move {
   path: [number, number][];
   options: CtxOptions;
+  eraser: boolean;
 }
 
 export type Room = {
@@ -14,12 +16,17 @@ export type Room = {
   users: Map<string, string>;
 };
 
+export interface User {
+  name: string;
+  color: string;
+}
+
 export interface ClientRoom {
-  id: string,
-  users: Map<string, string>,
-  usersMoves: Map<string, Move[]>,
-  movesWithoutUser: Move[],
-  myMoves: Move[],
+  id: string;
+  users: Map<string, User>;
+  usersMoves: Map<string, Move[]>;
+  movesWithoutUser: Move[];
+  myMoves: Move[];
 }
 
 export interface ServerToClientEvents {

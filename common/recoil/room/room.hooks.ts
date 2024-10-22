@@ -1,6 +1,7 @@
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { roomAtom } from "./room.atom";
+import { DEFAULT_ROOM, roomAtom } from "./room.atom";
 import { Move } from "@/common/types/socketTypes";
+import { getColor } from "@/common/lib/getColor";
 
 export const useRoom = () => {
   const room = useRecoilValue(roomAtom);
@@ -24,7 +25,7 @@ export const useSetRoomId = () => {
   const setRoomId = useSetRecoilState(roomAtom);
 
   const handlSetRoomId = (id: string) => {
-    setRoomId((prev) => ({ ...prev, id }));
+    setRoomId({ ...DEFAULT_ROOM, id });
   };
 
   return handlSetRoomId;
@@ -33,11 +34,12 @@ export const useSetRoomId = () => {
 export const useSetUsers = () => {
   const setRoom = useSetRecoilState(roomAtom);
 
-  const handleAddUser = (userId: string, username: string) => {
+  const handleAddUser = (userId: string, name: string) => {
     setRoom((prev) => {
       const { users: newUsers, usersMoves: newUserMoves } = prev;
-
-      newUsers.set(userId, username);
+      
+      const color = getColor([...newUsers.values()].pop()?.color)
+      newUsers.set(userId, {name, color});
       newUserMoves.set(userId, []);
 
       return { ...prev, users: newUsers, usersMoves: newUserMoves };
@@ -63,7 +65,7 @@ export const useSetUsers = () => {
 
   const handleAddMoveToUser = (userId: string, moves: Move) => {
     setRoom((prev) => {
-      const newUserMoves = prev.usersMoves
+      const newUserMoves = prev.usersMoves;
       const oldMoves = prev.usersMoves.get(userId);
 
       newUserMoves.set(userId, [...(oldMoves || []), moves]);
@@ -74,7 +76,7 @@ export const useSetUsers = () => {
 
   const handleRemoveMoveFromUser = (userId: string) => {
     setRoom((prev) => {
-      const newUserMoves = prev.usersMoves
+      const newUserMoves = prev.usersMoves;
       const oldMoves = prev.usersMoves.get(userId);
       oldMoves?.pop();
 
