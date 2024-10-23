@@ -125,11 +125,19 @@ nextApp.prepare().then(async () => {
     });
 
     socket.on("draw", (move) => {
-      console.log("drawing");
       const roomId = getRoomId();
+      const timestamp = Date.now();
 
-      addMove(roomId, socket.id, move);
-      socket.broadcast.to(roomId).emit("user_draw", move, socket.id);
+      addMove(roomId, socket.id, { ...move, timestamp });
+
+      io.to(socket.id).emit("your_move", { ...move, timestamp });
+      socket.broadcast
+        .to(roomId)
+        .emit("user_draw", { ...move, timestamp }, socket.id);
+    });
+
+    socket.on("send_msg", (msg) => {
+      io.to(getRoomId()).emit("new_msg", socket.id, msg);
     });
 
     socket.on("undo", () => {

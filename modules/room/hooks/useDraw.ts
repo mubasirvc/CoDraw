@@ -6,13 +6,13 @@ import { socket } from "@/common/lib/socket";
 import { getPos } from "@/common/lib/getPos";
 import { Move } from "@/common/types/socketTypes";
 
-let tempMoves: [number, number][] = []
+let tempMoves: [number, number][] = [];
 
 export const useDraw = (
   ctx: CanvasRenderingContext2D | undefined,
-  blocked: boolean,
+  blocked: boolean
 ) => {
-  const {handleAddMyMove, handleRemoveMyMove} = useMyMoves()
+  const { handleAddMyMove, handleRemoveMyMove } = useMyMoves();
   const options = useOptionsValue();
   const [drawing, setDrawing] = useState(false);
 
@@ -24,12 +24,23 @@ export const useDraw = (
       ctx.lineCap = "round";
       ctx.lineWidth = options.lineWidth;
       ctx.strokeStyle = options.lineColor;
+      if (options.erase) ctx.globalCompositeOperation = "destination-out";
     }
+  });
+
+  useEffect(() => {
+    socket.on("your_move", (move) => {
+      handleAddMyMove(move);
+    });
+
+    return () => {
+      socket.off("your_move");
+    };
   });
 
   const handleUndo = useCallback(() => {
     if (ctx) {
-      handleRemoveMyMove()
+      handleRemoveMyMove();
       socket.emit("undo");
     }
   }, [ctx, handleRemoveMyMove]);
@@ -69,12 +80,14 @@ export const useDraw = (
     const move: Move = {
       path: tempMoves,
       options,
+      timestamp: 0,
+      eraser: options.erase,
     };
-    handleAddMyMove(move)
+
     tempMoves = [];
+    ctx.globalCompositeOperation= "source-over"
 
     socket.emit("draw", move);
-    
   };
 
   const handleDraw = (x: number, y: number) => {
