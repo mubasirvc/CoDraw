@@ -1,10 +1,18 @@
+
+export type Shape = "line" | "circle" | "rect"
+
 export interface CtxOptions {
   lineWidth: number;
   lineColor: string;
   erase: boolean;
+  shape: Shape;
 }
 
 export interface Move {
+  shape: Shape;
+  radius: number;
+  width: number;
+  height: number;
   path: [number, number][];
   options: CtxOptions;
   timestamp: number;

@@ -10,9 +10,11 @@ import { useBoardPosition } from '../../hooks/useBoardPosition'
 import { useRoom } from '@/common/recoil/room'
 import { useSocketDraw } from '../../hooks/useSocketDraw'
 import { useDraw } from '../../hooks/useDraw'
+import { useOptionsValue } from '@/common/recoil/options'
 
 const Canvas = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
   const room = useRoom()
+  const options = useOptionsValue()
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const minCanvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -72,10 +74,10 @@ const Canvas = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
 
   useEffect(() => {
     if (ctx) {
-      drawAllMoves(ctx, room)
+      drawAllMoves(ctx, room, options)
       copyCanvasToSmall()
     }
-  }, [ctx, room])
+  }, [ctx, room, options])
 
 
   return (

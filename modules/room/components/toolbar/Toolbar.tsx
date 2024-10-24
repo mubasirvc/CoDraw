@@ -5,6 +5,7 @@ import { BsFillChatFill, BsFillImageFill, BsThreeDots } from 'react-icons/bs'
 import { HiOutlineDownload } from 'react-icons/hi'
 import Eraser from './Eraser'
 import { FaUndo } from 'react-icons/fa'
+import ShapeSelector from './ShapeSelector'
 
 const Toolbar = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
   return (
@@ -17,6 +18,7 @@ const Toolbar = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
       </button>
       <div className='h-px w-full bg-white' />
       <ColorPicker />
+      <ShapeSelector />
       <LineWidthPicker />
       <Eraser />
       <button className='text-xl'>
