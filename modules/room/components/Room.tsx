@@ -7,6 +7,7 @@ import { useRoom } from '@/common/recoil/room'
 import Toolbar from './toolbar/Toolbar'
 import NameInput from './NameInput'
 import UsersList from './UsersList'
+import Chat from './chat/Chat'
 
 const Room = () => {
   const room = useRoom()
@@ -23,6 +24,7 @@ const Room = () => {
         <Canvas undoRef={undoRef} />
         <MousePosition />
         <MouseRender />
+        <Chat />
       </div>
     </RoomContextProvider>
   )

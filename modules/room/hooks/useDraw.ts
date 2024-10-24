@@ -1,17 +1,26 @@
-import { useMyMoves } from "@/common/recoil/room";
+import { useMyMoves, useRoom } from "@/common/recoil/room";
 import { useBoardPosition } from "./useBoardPosition";
 import { useCallback, useEffect, useState } from "react";
 import { useOptionsValue } from "@/common/recoil/options/options.hooks";
 import { socket } from "@/common/lib/socket";
 import { getPos } from "@/common/lib/getPos";
-import { Move } from "@/common/types/socketTypes";
+import { CtxOptions, Move } from "@/common/types/socketTypes";
+import { drawAllMoves } from "../helpers/canvas.helper";
 
 let tempMoves: [number, number][] = [];
+
+const setCxtOptions = (ctx: CanvasRenderingContext2D, options: CtxOptions) => {
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  (ctx.lineWidth = options.lineWidth), (ctx.strokeStyle = options.lineColor);
+  if (options.erase) ctx.globalCompositeOperation = "destination-out";
+};
 
 export const useDraw = (
   ctx: CanvasRenderingContext2D | undefined,
   blocked: boolean
 ) => {
+  const room = useRoom()
   const { handleAddMyMove, handleRemoveMyMove } = useMyMoves();
   const options = useOptionsValue();
   const [drawing, setDrawing] = useState(false);
@@ -19,13 +28,7 @@ export const useDraw = (
   const { x: movedX, y: movedY } = useBoardPosition();
 
   useEffect(() => {
-    if (ctx) {
-      ctx.lineJoin = "round";
-      ctx.lineCap = "round";
-      ctx.lineWidth = options.lineWidth;
-      ctx.strokeStyle = options.lineColor;
-      if (options.erase) ctx.globalCompositeOperation = "destination-out";
-    }
+    if (ctx) setCxtOptions(ctx, options)
   });
 
   useEffect(() => {
@@ -85,13 +88,29 @@ export const useDraw = (
     };
 
     tempMoves = [];
-    ctx.globalCompositeOperation= "source-over"
+    ctx.globalCompositeOperation = "source-over";
 
     socket.emit("draw", move);
   };
 
-  const handleDraw = (x: number, y: number) => {
+  const handleDraw = (x: number, y: number, shift?: boolean) => {
     if (!ctx || !drawing || blocked) return;
+
+    if(shift){
+      tempMoves = tempMoves.slice(0, 1)
+      drawAllMoves(ctx, room)
+      setCxtOptions(ctx, options)
+
+      ctx.beginPath()
+      ctx.lineTo(tempMoves[0][0], tempMoves[0][1])
+      ctx.lineTo(getPos(x, movedX), getPos(y, movedY))
+      ctx.stroke()
+      ctx.closePath()
+
+      tempMoves.push([getPos(x, movedX), getPos(y, movedY)]);
+
+      return
+    }
 
     ctx.lineTo(getPos(x, movedX), getPos(y, movedY));
     ctx.stroke();
