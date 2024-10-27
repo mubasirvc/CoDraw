@@ -32,6 +32,11 @@ const Home = () => {
       socket.off("joined", handlelJoinedRoom)
     }
 
+    useEffect(() => {
+      socket.emit("leave_room")
+      setAtomRoomId("")
+    }, [setAtomRoomId])
+
   }, [router, setAtomRoomId, router, roomId])
 
   const handleCreateRoom = () => {
@@ -51,7 +56,7 @@ const Home = () => {
       </h1>
       <h3 className='text-2xl'> Real time whiteboard</h3>
       <div className='mt-10 flex flex-col gap-2'>
-      <label htmlFor="username" className='self-start font-bold leading-tight'>
+        <label htmlFor="username" className='self-start font-bold leading-tight'>
           Enter Username
         </label>
         <input

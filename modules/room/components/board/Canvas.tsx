@@ -1,7 +1,7 @@
 import { CANVAS_SIZE } from '@/common/constants'
 import useViewPortSize from '@/common/hooks/useViewPortSize'
 import { motion } from 'framer-motion'
-import React, { RefObject, useEffect, useRef, useState } from 'react'
+import React, { RefObject, useCallback, useEffect, useRef, useState } from 'react'
 import { useKeyPressEvent } from 'react-use'
 import { socket } from '@/common/lib/socket'
 import { drawAllMoves } from '../../helpers/canvas.helper'
@@ -11,12 +11,13 @@ import { useRoom } from '@/common/recoil/room'
 import { useSocketDraw } from '../../hooks/useSocketDraw'
 import { useDraw } from '../../hooks/useDraw'
 import { useOptionsValue } from '@/common/recoil/options'
+import { useRefs } from '../../hooks/useRefs'
 
-const Canvas = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
+const Canvas = () => {
   const room = useRoom()
   const options = useOptionsValue()
-  const canvasRef = useRef<HTMLCanvasElement>(null)
   const minCanvasRef = useRef<HTMLCanvasElement>(null)
+  const { undoRef, canvasRef } = useRefs()
 
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
   const [draging, setDraging] = useState(false)
@@ -32,7 +33,7 @@ const Canvas = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
 
   const { x, y } = useBoardPosition()
 
-  const copyCanvasToSmall = () => {
+  const copyCanvasToSmall = useCallback(() => {
     if (canvasRef.current && minCanvasRef.current) {
       const smallCtx = minCanvasRef.current.getContext("2d")
       if (smallCtx) {
@@ -40,7 +41,7 @@ const Canvas = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
         smallCtx.drawImage(canvasRef.current, 0, 0, CANVAS_SIZE.width, CANVAS_SIZE.height)
       }
     }
-  }
+  }, [canvasRef, minCanvasRef])
 
   const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, handleUndo } = useDraw(ctx, draging)
 
@@ -66,7 +67,7 @@ const Canvas = ({ undoRef }: { undoRef: RefObject<HTMLButtonElement> }) => {
       window.removeEventListener("keyup", handleKeyUp)
       undoBtn?.removeEventListener("click", handleUndo)
     }
-  }, [draging, handleUndo, undoRef])
+  }, [draging, handleUndo, undoRef, canvasRef])
 
   useEffect(() => {
     if (ctx) socket.emit("joined_room")

@@ -4,22 +4,25 @@ import { useSetRoom, useSetUsers } from "@/common/recoil/room/room.hooks";
 import usersAtom, { useUserIds } from "@/common/recoil/users";
 import { Move, User } from "@/common/types/socketTypes";
 import { MotionValue, useMotionValue } from "framer-motion";
-import { createContext, ReactNode, useEffect } from "react";
+import { createContext, ReactNode, RefObject, useEffect, useRef } from "react";
 import { useSetRecoilState } from "recoil";
 
 export const roomContext = createContext<{
   x: MotionValue<number>
   y: MotionValue<number>
+  undoRef: RefObject<HTMLButtonElement>;
+  canvasRef: RefObject<HTMLCanvasElement>;
 }>(null!)
 
 const RoomContextProvider = ({ children }: { children: ReactNode }) => {
   const setRoom = useSetRoom()
   const { handleAddUser, handleRemoveUser } = useSetUsers()
-  // const setUsers = useSetRecoilState(usersAtom)
-  // const usersIds = useUserIds()
 
   const x = useMotionValue(0)
   const y = useMotionValue(0)
+
+  const undoRef = useRef<HTMLButtonElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
     socket.on("room", (room, usersMovesoParse, usersToParse) => {
@@ -59,7 +62,7 @@ const RoomContextProvider = ({ children }: { children: ReactNode }) => {
   }, [handleRemoveUser, handleAddUser, setRoom])
 
   return (
-    <roomContext.Provider value={{ x, y }}>{children} </roomContext.Provider>
+    <roomContext.Provider value={{ x, y, undoRef, canvasRef }}>{children} </roomContext.Provider>
   )
 }
 
