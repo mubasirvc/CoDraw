@@ -1,3 +1,5 @@
+import { Move } from "../types/socketTypes";
+
 export const CANVAS_SIZE = {
   width: 4000,
   height: 2000
@@ -19,6 +21,31 @@ const COLORS = {
   RASPBERRY_ROSE: "#B3446C"
 };
 
-
-
 export const COLORS_ARRAY = [...Object.values(COLORS)]
+
+export const DEFAULT_MOVE = {
+  circle: {
+    cX: 0,
+    cY: 0,
+    radiusX: 0,
+    radiusY: 0,
+  },
+  rect: {
+    width: 0,
+    height: 0,
+  },
+  path: [],
+  options: {
+    shape: "line",
+    mode: "draw",
+    lineWidth: 1,
+    lineColor: { r: 0, g: 0, b: 0, a: 0 },
+    fillColor: { r: 0, g: 0, b: 0, a: 0 },
+    selection: null,
+  },
+  id: "",
+  img: {
+    base64: "",
+  },
+  timestamp: 0,
+};

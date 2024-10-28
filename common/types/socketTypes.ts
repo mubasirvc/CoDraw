@@ -1,5 +1,4 @@
-
-export type Shape = "line" | "circle" | "rect" | "image"
+export type Shape = "line" | "circle" | "rect" | "image";
 
 export interface CtxOptions {
   lineWidth: number;
@@ -9,14 +8,21 @@ export interface CtxOptions {
 }
 
 export interface Move {
-  radius: number;
-  width: number;
-  height: number;
+  circle: {
+    cX: number;
+    cY: number;
+    radiusX: number;
+    radiusY: number;
+  };
+  rect: {
+    width: number;
+    height: number;
+  };
+  img: { base64: string };
   path: [number, number][];
   options: CtxOptions;
   timestamp: number;
   eraser: boolean;
-  base64: string;
   id: string;
 }
 
@@ -26,7 +32,7 @@ export type Room = {
   users: Map<string, string>;
 };
 
-export interface Message{
+export interface Message {
   userId: string;
   username: string;
   color: string;

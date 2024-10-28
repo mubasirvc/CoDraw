@@ -6,9 +6,10 @@ import { getPos } from "@/common/lib/getPos";
 import { Move } from "@/common/types/socketTypes";
 import { drawCircle, drawLine, drawRect } from "../helpers/canvas.helper";
 import { useRefs } from "./useRefs";
+import { DEFAULT_MOVE } from "@/common/constants";
 
 let tempMoves: [number, number][] = [];
-let tempRadius = 0;
+let tempCircle = DEFAULT_MOVE.circle;
 let tempSize = { width: 0, height: 0 };
 let tempImgData: ImageData | undefined;
 
@@ -73,23 +74,20 @@ export const useDraw = (blocked: boolean) => {
     setDrawing(false);
     ctx.closePath();
 
-    if (options.shape !== "circle") tempRadius = 0;
-    if (options.shape !== "rect") tempSize = { width: 0, height: 0 };
-
     const move: Move = {
-      ...tempSize,
-      radius: tempRadius,
+      rect: { ...tempSize },
+      circle: { ...tempCircle },
       path: tempMoves,
       options,
       timestamp: 0,
       eraser: options.erase,
-      base64: "",
-      id: '',
+      img: DEFAULT_MOVE.img,
+      id: "",
     };
 
     tempMoves = [];
-    tempRadius = 0;
-    tempSize = {width: 0, height: 0};
+    tempCircle = { ...tempCircle };
+    tempSize = { width: 0, height: 0 };
     tempImgData = undefined;
 
     socket.emit("draw", move);
@@ -112,7 +110,8 @@ export const useDraw = (blocked: boolean) => {
         break;
       case "circle":
         drawAndSet();
-        tempRadius = drawCircle(ctx, tempMoves[0], finalX, finalY);
+        if(shift) tempCircle = drawCircle(ctx, tempMoves[0], finalX, finalY, shift);
+        else tempCircle = drawCircle(ctx, tempMoves[0], finalX, finalY );
         break;
       case "rect":
         drawAndSet();

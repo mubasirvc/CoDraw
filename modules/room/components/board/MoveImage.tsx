@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 
 import { motion, useMotionValue } from "framer-motion";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
@@ -10,6 +9,7 @@ import { useBoardPosition } from "../../hooks/useBoardPosition";
 import { useMoveImage } from "../../hooks/useMoveImage";
 import { useRefs } from "../../hooks/useRefs";
 import { Move } from "@/common/types/socketTypes";
+import { DEFAULT_MOVE } from "@/common/constants";
 
 const MoveImage = () => {
   const { canvasRef } = useRefs();
@@ -33,23 +33,19 @@ const MoveImage = () => {
     const [finalX, finalY] = [getPos(imageX.get(), x), getPos(imageY.get(), y)];
 
     const move: Move = {
-      // ...DEFAULT_MOVE,
-      width: 0,
-      height: 0,
-      // img: { base64: moveImage.base64 },
-      radius: 0,
+      rect: DEFAULT_MOVE.rect,
+      circle: DEFAULT_MOVE.circle,
+      img: { base64: moveImage },
       path: [[finalX, finalY]],
       options: {
-        // ...DEFAULT_MOVE.options,
         lineWidth: 1,
         lineColor: "#000",
         erase: false,
-        // selection: null,
         shape: "image",
       },
       timestamp: 0,
       eraser: false,
-      base64: moveImage,
+      id: '',
     };
 
     socket.emit("draw", move);
