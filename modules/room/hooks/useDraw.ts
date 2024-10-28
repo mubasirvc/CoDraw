@@ -7,6 +7,7 @@ import { Move } from "@/common/types/socketTypes";
 import { drawCircle, drawLine, drawRect } from "../helpers/canvas.helper";
 import { useRefs } from "./useRefs";
 import { DEFAULT_MOVE } from "@/common/constants";
+import { useSetSavedMoves } from "@/common/recoil/savedMoves";
 
 let tempMoves: [number, number][] = [];
 let tempCircle = DEFAULT_MOVE.circle;
@@ -22,6 +23,7 @@ export const useDraw = (blocked: boolean) => {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>();
 
   const { x: movedX, y: movedY } = useBoardPosition();
+  const { clearSavedMoves } = useSetSavedMoves();
 
   useEffect(() => {
     const newCtx = canvasRef.current?.getContext("2d");
@@ -91,6 +93,7 @@ export const useDraw = (blocked: boolean) => {
     tempImgData = undefined;
 
     socket.emit("draw", move);
+    clearSavedMoves()
   };
 
   const handleDraw = (x: number, y: number, shift?: boolean) => {
@@ -110,8 +113,9 @@ export const useDraw = (blocked: boolean) => {
         break;
       case "circle":
         drawAndSet();
-        if(shift) tempCircle = drawCircle(ctx, tempMoves[0], finalX, finalY, shift);
-        else tempCircle = drawCircle(ctx, tempMoves[0], finalX, finalY );
+        if (shift)
+          tempCircle = drawCircle(ctx, tempMoves[0], finalX, finalY, shift);
+        else tempCircle = drawCircle(ctx, tempMoves[0], finalX, finalY);
         break;
       case "rect":
         drawAndSet();

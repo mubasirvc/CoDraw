@@ -1,19 +1,19 @@
-import React, { RefObject } from 'react'
+import React from 'react'
 import ColorPicker from './ColorPicker'
 import LineWidthPicker from './LineWidthPicker'
-import { BsFillChatFill, BsFillImageFill, BsThreeDots } from 'react-icons/bs'
+import { BsFillChatFill, BsThreeDots } from 'react-icons/bs'
 import { HiOutlineDownload } from 'react-icons/hi'
 import Eraser from './Eraser'
-import { FaUndo } from 'react-icons/fa'
 import ShapeSelector from './ShapeSelector'
 import { useRefs } from '../../hooks/useRefs'
 import Router from 'next/router'
 import { CANVAS_SIZE } from '@/common/constants'
 import { ImExit } from "react-icons/im";
 import ImageChoser from './ImageChoser'
+import UndoRedoBtn from './UndoRedoBtn'
 
 const Toolbar = () => {
-  const { undoRef, canvasRef } = useRefs()
+  const { canvasRef } = useRefs()
 
   const handleExit = () => Router.push("/");
 
@@ -39,9 +39,7 @@ const Toolbar = () => {
       className="absolute left-10 mt-56  z-50 grid grid-cols-2 items-center gap-5 rounded-lg bg-zinc-900 p-5 text-white 2xl:grid-cols-1"
       style={{ transform: "translateY(-50%" }}
     >
-      <button className='text-xl' ref={undoRef}>
-        <FaUndo />
-      </button>
+      <UndoRedoBtn />
       <div className='h-px w-full bg-white' />
       <ColorPicker />
       <ShapeSelector />
@@ -58,8 +56,8 @@ const Toolbar = () => {
         <HiOutlineDownload />
       </button>
       <button className="btn-icon text-xl" onClick={handleExit}>
-          <ImExit />
-        </button>
+        <ImExit />
+      </button>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { useMyMoves, useRoom } from "@/common/recoil/room";
 
 import { useRefs } from "./useRefs";
 import { Move } from "@/common/types/socketTypes";
+import { useSetSavedMoves } from "@/common/recoil/savedMoves";
 
 let prevMovesLength = 0;
 
@@ -19,7 +20,8 @@ export const useMovesHandlers = () => {
     if (newCtx) setCtx(newCtx);
   }, [canvasRef]);
 
-  // const { addSavedMove, removeSavedMove } = useSetSavedMoves();
+  const { addSavedMove, removeSavedMove } = useSetSavedMoves();
+
   // const ctx = useCtx();
   // const bg = useBackground();
   // const { clearSelection } = useSetSelection();
@@ -227,34 +229,30 @@ export const useMovesHandlers = () => {
 
   const handleUndo = () => {
     if (ctx) {
-      // const move = handleRemoveMyMove();
-      handleRemoveMyMove();
-      socket.emit("undo");
-
-      // if (move?.options.mode === "select") clearSelection();
-      // else if (move) {
-      //   addSavedMove(move);
-      //   socket.emit("undo");
-      // }
+      const move = handleRemoveMyMove();
+      if (move) {
+        addSavedMove(move);
+        socket.emit("undo");
+      }
     }
   };
 
-  // const handleRedo = () => {
-  //   if (ctx) {
-  //     const move = removeSavedMove();
+  const handleRedo = () => {
+    if (ctx) {
+      const move = removeSavedMove();
 
-  //     if (move) {
-  //       socket.emit("draw", move);
-  //     }
-  //   }
-  // };
+      if (move) {
+        socket.emit("draw", move);
+      }
+    }
+  };
 
   useEffect(() => {
     const handleUndoRedoKeyboard = (e: KeyboardEvent) => {
       if (e.key === "z" && e.ctrlKey) {
         handleUndo();
-        // } else if (e.key === "y" && e.ctrlKey) {
-        //   handleRedo();
+        } else if (e.key === "y" && e.ctrlKey) {
+          handleRedo();
       }
     };
 
@@ -263,7 +261,7 @@ export const useMovesHandlers = () => {
     return () => {
       document.removeEventListener("keydown", handleUndoRedoKeyboard);
     };
-  }, [handleUndo]);
+  }, [handleUndo, handleRedo]);
 
-  return { drawAllMoves, drawMove, handleUndo };
+  return { drawAllMoves, drawMove, handleUndo, handleRedo };
 };

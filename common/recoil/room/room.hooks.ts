@@ -103,8 +103,10 @@ export const useMyMoves = () => {
 
   const handleRemoveMyMove = () => {
     const newMoves = [...room.myMoves];
-    newMoves.pop();
+    const removedMove = newMoves.pop();
     setRoom((prev) => ({ ...prev, myMoves: newMoves }));
+
+    return removedMove
   };
 
   return { handleAddMyMove, handleRemoveMyMove, myMoves: room.myMoves };

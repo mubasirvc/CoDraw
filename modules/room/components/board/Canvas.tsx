@@ -12,7 +12,7 @@ import { useDraw } from '../../hooks/useDraw'
 import { useRefs } from '../../hooks/useRefs'
 
 const Canvas = () => {
-  const { undoRef, canvasRef } = useRefs()
+  const { undoRef, canvasRef, redoRef } = useRefs()
 
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
   const [draging, setDraging] = useState(false)
@@ -21,7 +21,7 @@ const Canvas = () => {
   const { width, height } = useViewPortSize()
 
   const { x, y } = useBoardPosition()
-  const { handleUndo } = useMovesHandlers()
+  const { handleUndo, handleRedo } = useMovesHandlers()
 
   useKeyPressEvent("Controll", (e) => {
     if (e.ctrlKey && !draging) {
@@ -30,7 +30,7 @@ const Canvas = () => {
   })
 
 
-  const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, } = useDraw(draging )
+  const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, } = useDraw(draging)
 
   useSocketDraw(ctx, drawing)
 
@@ -47,14 +47,17 @@ const Canvas = () => {
     window.addEventListener("keyup", handleKeyUp)
 
     const undoBtn = undoRef.current
+    const redoBtn = redoRef.current
 
     undoBtn?.addEventListener("click", handleUndo)
+    redoBtn?.addEventListener("click", handleRedo)
 
     return () => {
       window.removeEventListener("keyup", handleKeyUp)
       undoBtn?.removeEventListener("click", handleUndo)
+      undoBtn?.removeEventListener("click", handleRedo)
     }
-  }, [draging, handleUndo, undoRef, canvasRef])
+  }, [draging, handleUndo, undoRef, canvasRef, redoRef, handleRedo])
 
   useEffect(() => {
     if (ctx) socket.emit("joined_room")
