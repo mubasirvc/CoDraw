@@ -4,7 +4,7 @@ import React from 'react'
 const UsersList = () => {
   const { users } = useRoom()
   return (
-    <div className='pointer-events-none absolute z-10 flex p-5'>
+    <div className='pointer-events-none absolute z-30 flex p-5'>
       {[...users.keys()].map((userId, i) => {
         return (
           <div

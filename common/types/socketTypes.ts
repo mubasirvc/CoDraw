@@ -1,5 +1,5 @@
 
-export type Shape = "line" | "circle" | "rect"
+export type Shape = "line" | "circle" | "rect" | "image"
 
 export interface CtxOptions {
   lineWidth: number;
@@ -9,7 +9,6 @@ export interface CtxOptions {
 }
 
 export interface Move {
-  shape: Shape;
   radius: number;
   width: number;
   height: number;
@@ -17,6 +16,8 @@ export interface Move {
   options: CtxOptions;
   timestamp: number;
   eraser: boolean;
+  base64: string;
+  id: string;
 }
 
 export type Room = {

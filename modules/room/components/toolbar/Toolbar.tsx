@@ -10,6 +10,7 @@ import { useRefs } from '../../hooks/useRefs'
 import Router from 'next/router'
 import { CANVAS_SIZE } from '@/common/constants'
 import { ImExit } from "react-icons/im";
+import ImageChoser from './ImageChoser'
 
 const Toolbar = () => {
   const { undoRef, canvasRef } = useRefs()
@@ -46,9 +47,7 @@ const Toolbar = () => {
       <ShapeSelector />
       <LineWidthPicker />
       <Eraser />
-      <button className='text-xl'>
-        <BsFillImageFill />
-      </button>
+      <ImageChoser />
       <button className='text-xl'>
         <BsThreeDots />
       </button>

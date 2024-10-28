@@ -9,6 +9,7 @@ import {
   ServerToClientEvents,
 } from "@/common/types/socketTypes";
 import { socket } from "@/common/lib/socket";
+import { uuid } from "uuidv4";
 
 const PORT = parseInt(process.env.PORT || "5000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -127,6 +128,8 @@ nextApp.prepare().then(async () => {
     socket.on("draw", (move) => {
       const roomId = getRoomId();
       const timestamp = Date.now();
+
+      move.id = uuid()
 
       addMove(roomId, socket.id, { ...move, timestamp });
 
