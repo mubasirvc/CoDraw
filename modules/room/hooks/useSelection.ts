@@ -9,6 +9,8 @@ import { useOptionsValue } from "@/common/recoil/options";
 import { useCtx } from "./useCtx";
 import { useMoveImage } from "./useMoveImage";
 import { useRefs } from "./useRefs";
+import { Move } from "@/common/types/socketTypes";
+import { DEFAULT_MOVE } from "@/common/constants";
 
 let tempSelection = {
   x: 0,
@@ -25,28 +27,27 @@ export const useSelection = (drawAllMoves: () => Promise<void>) => {
   const { setMoveImage } = useMoveImage();
 
   useEffect(() => {
-    // const callback = async () => {
-    if (ctx && selection) {
-      drawAllMoves();
+    const callback = async () => {
+      if (ctx && selection) {
+        await drawAllMoves();
 
-      setTimeout(() => {
-        const { x, y, width, height } = selection;
+        setTimeout(() => {
+          const { x, y, width, height } = selection;
 
-        ctx.lineWidth = 2;
-        ctx.strokeStyle = "#000";
-        ctx.setLineDash([5, 10]);
-        ctx.globalCompositeOperation = "source-over";
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = "#000";
+          ctx.setLineDash([5, 10]);
+          ctx.globalCompositeOperation = "source-over";
 
-        ctx.beginPath();
-        ctx.rect(x - 2, y - 2, width + 4, height + 4);
-        // ctx.rect(x, y, width, height);
-        ctx.stroke();
-        ctx.closePath();
+          ctx.beginPath();
+          ctx.rect(x, y, width, height);
+          ctx.stroke();
+          ctx.closePath();
 
-        ctx.setLineDash([]);
-      }, 10);
-    }
-    //  };
+          ctx.setLineDash([]);
+        }, 10);
+      }
+    };
 
     // if (
     //   tempSelection.width !== selection?.width ||
@@ -54,7 +55,7 @@ export const useSelection = (drawAllMoves: () => Promise<void>) => {
     //   tempSelection.x !== selection?.x ||
     //   tempSelection.y !== selection?.y
     // )
-    //   callback();
+    callback();
 
     // return () => {
     //   if (selection) tempSelection = selection;
@@ -192,8 +193,11 @@ export const useSelection = (drawAllMoves: () => Promise<void>) => {
 
   useEffect(() => {
     const handleSelection = async (e: KeyboardEvent) => {
-      if (e.key === "c" && e.ctrlKey && selection) {
-        const { x, y, width, height } = selection;
+      if (!selection) return;
+
+      const { x, y, width, height } = selection;
+
+      if (e.key === "c" && e.ctrlKey) {
         const imageData = ctx?.getImageData(x, y, width, height);
 
         if (imageData) {
@@ -214,7 +218,34 @@ export const useSelection = (drawAllMoves: () => Promise<void>) => {
           });
         }
       }
-      // if (e.key === "Delete" && selection) createDeleteMove();
+      if (e.key === "Delete" && selection){
+        const move: Move = {
+          circle: {
+            cX: 0,
+            cY: 0,
+            radiusX: 0,
+            radiusY: 0
+          },
+          rect: {
+            width,
+            height,
+            fill: true,
+          },
+          path: [[x, y]],
+          options: {
+            ...options,
+            shape: 'rect',
+            mode: "eraser"
+          },
+          id: '',
+          img: {
+            base64: ''
+          },
+          timestamp: 0
+        }
+
+        socket.emit("draw", move)
+      }
     };
 
     document.addEventListener("keydown", handleSelection);
@@ -224,56 +255,56 @@ export const useSelection = (drawAllMoves: () => Promise<void>) => {
     };
   }, [ctx, selection]);
 
-//   useEffect(() => {
-//     const handleSelectionMove = async () => {
-//       if (selection) {
-//         const blob = await makeBlob();
-//         if (!blob) return;
+  //   useEffect(() => {
+  //     const handleSelectionMove = async () => {
+  //       if (selection) {
+  //         const blob = await makeBlob();
+  //         if (!blob) return;
 
-//         const { x, y, width, height } = dimension;
+  //         const { x, y, width, height } = dimension;
 
-//         const reader = new FileReader();
-//         reader.readAsDataURL(blob);
-//         reader.addEventListener("loadend", () => {
-//           const base64 = reader.result?.toString();
+  //         const reader = new FileReader();
+  //         reader.readAsDataURL(blob);
+  //         reader.addEventListener("loadend", () => {
+  //           const base64 = reader.result?.toString();
 
-//           if (base64) {
-//             createDeleteMove();
-//             setMoveImage({
-//               base64,
-//               x: Math.min(x, x + width),
-//               y: Math.min(y, y + height),
-//             });
-//           }
-//         });
-//       }
-//     };
+  //           if (base64) {
+  //             createDeleteMove();
+  //             setMoveImage({
+  //               base64,
+  //               x: Math.min(x, x + width),
+  //               y: Math.min(y, y + height),
+  //             });
+  //           }
+  //         });
+  //       }
+  //     };
 
-//     if (selectionRefs.current) {
-//       const moveBtn = selectionRefs.current[0];
-//       const copyBtn = selectionRefs.current[1];
-//       const deleteBtn = selectionRefs.current[2];
+  //     if (selectionRefs.current) {
+  //       const moveBtn = selectionRefs.current[0];
+  //       const copyBtn = selectionRefs.current[1];
+  //       const deleteBtn = selectionRefs.current[2];
 
-//       moveBtn.addEventListener("click", handleSelectionMove);
-//       copyBtn.addEventListener("click", handleCopy);
-//       deleteBtn.addEventListener("click", createDeleteMove);
+  //       moveBtn.addEventListener("click", handleSelectionMove);
+  //       copyBtn.addEventListener("click", handleCopy);
+  //       deleteBtn.addEventListener("click", createDeleteMove);
 
-//       return () => {
-//         moveBtn?.removeEventListener("click", handleSelectionMove);
-//         copyBtn?.removeEventListener("click", handleCopy);
-//         deleteBtn?.removeEventListener("click", createDeleteMove);
-//       };
-//     }
+  //       return () => {
+  //         moveBtn?.removeEventListener("click", handleSelectionMove);
+  //         copyBtn?.removeEventListener("click", handleCopy);
+  //         deleteBtn?.removeEventListener("click", createDeleteMove);
+  //       };
+  //     }
 
-//     return () => {};
-//   }, [
-//     createDeleteMove,
-//     dimension,
-//     handleCopy,
-//     makeBlob,
-//     selection,
-//     // selectionRefs,
-//     setMoveImage,
-//   ]);
-// };
-}
+  //     return () => {};
+  //   }, [
+  //     createDeleteMove,
+  //     dimension,
+  //     handleCopy,
+  //     makeBlob,
+  //     selection,
+  //     // selectionRefs,
+  //     setMoveImage,
+  //   ]);
+  // };
+};
