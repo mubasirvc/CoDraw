@@ -1,9 +1,7 @@
 import React from 'react'
 import ColorPicker from './ColorPicker'
 import LineWidthPicker from './LineWidthPicker'
-import { BsFillChatFill, BsThreeDots } from 'react-icons/bs'
 import { HiOutlineDownload } from 'react-icons/hi'
-import Eraser from './Eraser'
 import ShapeSelector from './ShapeSelector'
 import { useRefs } from '../../hooks/useRefs'
 import Router from 'next/router'
@@ -11,6 +9,7 @@ import { CANVAS_SIZE } from '@/common/constants'
 import { ImExit } from "react-icons/im";
 import ImageChoser from './ImageChoser'
 import UndoRedoBtn from './UndoRedoBtn'
+import ModePicker from './ModePicker'
 
 const Toolbar = () => {
   const { canvasRef } = useRefs()
@@ -44,14 +43,8 @@ const Toolbar = () => {
       <ColorPicker />
       <ShapeSelector />
       <LineWidthPicker />
-      <Eraser />
+      <ModePicker />
       <ImageChoser />
-      <button className='text-xl'>
-        <BsThreeDots />
-      </button>
-      <button className='text-xl'>
-        <BsFillChatFill />
-      </button>
       <button className="btn-icon text-2xl" onClick={handleDownload}>
         <HiOutlineDownload />
       </button>

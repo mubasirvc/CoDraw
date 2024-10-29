@@ -10,11 +10,11 @@ import { useBoardPosition } from '../../hooks/useBoardPosition'
 import { useSocketDraw } from '../../hooks/useSocketDraw'
 import { useDraw } from '../../hooks/useDraw'
 import { useRefs } from '../../hooks/useRefs'
+import { useCtx } from '../../hooks/useCtx'
 
 const Canvas = () => {
   const { undoRef, canvasRef, redoRef } = useRefs()
 
-  const [ctx, setCtx] = useState<CanvasRenderingContext2D>()
   const [draging, setDraging] = useState(false)
   const [movedMiniMap, setmovedMiniMap] = useState(false)
 
@@ -23,21 +23,19 @@ const Canvas = () => {
   const { x, y } = useBoardPosition()
   const { handleUndo, handleRedo } = useMovesHandlers()
 
+  const ctx = useCtx()
+
   useKeyPressEvent("Controll", (e) => {
     if (e.ctrlKey && !draging) {
       setDraging(true)
     }
   })
 
-
   const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, } = useDraw(draging)
 
-  useSocketDraw(ctx, drawing)
+  useSocketDraw(drawing)
 
   useEffect(() => {
-    const newCtx = canvasRef.current?.getContext("2d")
-    if (newCtx) setCtx(newCtx)
-
     const handleKeyUp = (e: KeyboardEvent) => {
       if (!e.ctrlKey && draging) {
         setDraging(false)

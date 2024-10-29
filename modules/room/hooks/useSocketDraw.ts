@@ -3,18 +3,15 @@ import { socket } from "@/common/lib/socket";
 import { Move } from "@/common/types/socketTypes";
 import { useSetUsers } from "@/common/recoil/room";
 
-export const useSocketDraw = (
-  ctx: CanvasRenderingContext2D | undefined,
-  drawing: boolean,
-) => {
-  const {handleAddMoveToUser, handleRemoveMoveFromUser} = useSetUsers()
+export const useSocketDraw = (drawing: boolean) => {
+  const { handleAddMoveToUser, handleRemoveMoveFromUser } = useSetUsers();
 
   useEffect(() => {
     let moveToDrawLater: Move | undefined;
     let userIdLater = "";
     socket.on("user_draw", (move, userId) => {
-      if (ctx && !drawing) {
-       handleAddMoveToUser(userId, move)
+      if (!drawing) {
+        handleAddMoveToUser(userId, move);
       } else {
         moveToDrawLater = move;
         userIdLater = userId;
@@ -23,19 +20,19 @@ export const useSocketDraw = (
 
     return () => {
       socket.off("user_draw");
-      if (moveToDrawLater && userIdLater && ctx) {
-        handleAddMoveToUser(userIdLater, moveToDrawLater)
+      if (moveToDrawLater && userIdLater) {
+        handleAddMoveToUser(userIdLater, moveToDrawLater);
       }
     };
-  }, [ctx, drawing, handleAddMoveToUser]);
+  }, [drawing, handleAddMoveToUser]);
 
   useEffect(() => {
     socket.on("user_undo", (userId) => {
-    handleRemoveMoveFromUser(userId)
+      handleRemoveMoveFromUser(userId);
     });
 
     return () => {
       socket.off("user_undo");
     };
-  }, [ctx, handleRemoveMoveFromUser]);
+  }, [handleRemoveMoveFromUser]);
 };

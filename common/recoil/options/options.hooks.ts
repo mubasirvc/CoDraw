@@ -18,3 +18,22 @@ export const useOptions = () => {
 
   return options;
 };
+
+export const useSetSelection = () => {
+  const setOptions = useSetOptions();
+
+  const setSelection = (rect: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  }) => {
+    setOptions((prev) => ({ ...prev, selection: rect }));
+  };
+
+  const clearSelection = () => {
+    setOptions((prev) => ({ ...prev, selection: null }));
+  };
+
+  return { setSelection, clearSelection };
+};

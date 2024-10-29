@@ -10,7 +10,6 @@ const UndoRedoBtn = () => {
 
   const { myMoves } = useMyMoves();
   const savedMoves = useSavedMoves();
-console.log(savedMoves.length, myMoves.length, 'mymovvv');
 
   return (
     <>

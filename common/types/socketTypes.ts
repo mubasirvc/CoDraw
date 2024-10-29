@@ -1,10 +1,12 @@
 export type Shape = "line" | "circle" | "rect" | "image";
+export type CtxMode = "eraser" | "draw" | "select";
 
 export interface CtxOptions {
   lineWidth: number;
   lineColor: string;
-  erase: boolean;
+  mode: CtxMode;
   shape: Shape;
+  selection: { x: number; y: number; width: number; height: number } | null;
 }
 
 export interface Move {
@@ -17,12 +19,12 @@ export interface Move {
   rect: {
     width: number;
     height: number;
+    fill?: boolean;
   };
   img: { base64: string };
   path: [number, number][];
   options: CtxOptions;
   timestamp: number;
-  eraser: boolean;
   id: string;
 }
 
