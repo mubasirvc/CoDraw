@@ -1,8 +1,7 @@
 import { CANVAS_SIZE } from '@/common/constants'
-import useViewPortSize from '@/common/hooks/useViewPortSize'
+import { useViewportSize } from '@/common/hooks/useViewPortSize'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
-import { useKeyPressEvent } from 'react-use'
 import { socket } from '@/common/lib/socket'
 import { useMovesHandlers } from '../../hooks/useMoveHandlers'
 import MiniMap from './MiniMap'
@@ -11,38 +10,32 @@ import { useSocketDraw } from '../../hooks/useSocketDraw'
 import { useDraw } from '../../hooks/useDraw'
 import { useRefs } from '../../hooks/useRefs'
 import { useCtx } from '../../hooks/useCtx'
+import { BsArrowsMove } from 'react-icons/bs'
 
 const Canvas = () => {
   const { undoRef, canvasRef, redoRef } = useRefs()
-
-  const [draging, setDraging] = useState(false)
-  const [movedMiniMap, setmovedMiniMap] = useState(false)
-
-  const { width, height } = useViewPortSize()
-
+  const [draging, setDraging] = useState(true)
+  const { width, height } = useViewportSize()
   const { x, y } = useBoardPosition()
-  const { handleUndo, handleRedo } = useMovesHandlers()
-
   const ctx = useCtx()
 
-  useKeyPressEvent("Controll", (e) => {
-    if (e.ctrlKey && !draging) {
-      setDraging(true)
-    }
-  })
-
-  const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, } = useDraw(draging)
+  const { handleDraw, handleEndDrawing, handleStartDrawing, drawing, clearOnYourMove } = useDraw(draging)
 
   useSocketDraw(drawing)
 
+  const { handleUndo, handleRedo } = useMovesHandlers(clearOnYourMove)
+
   useEffect(() => {
-    const handleKeyUp = (e: KeyboardEvent) => {
-      if (!e.ctrlKey && draging) {
-        setDraging(false)
-      }
+    setDraging(false)
+  }, [])
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      setDraging(e.ctrlKey)
     }
 
-    window.addEventListener("keyup", handleKeyUp)
+    window.addEventListener("keyup", handleKey)
+    window.addEventListener("keydown", handleKey)
 
     const undoBtn = undoRef.current
     const redoBtn = redoRef.current
@@ -51,7 +44,8 @@ const Canvas = () => {
     redoBtn?.addEventListener("click", handleRedo)
 
     return () => {
-      window.removeEventListener("keyup", handleKeyUp)
+      window.removeEventListener("keyup", handleKey)
+      window.removeEventListener("keydown", handleKey)
       undoBtn?.removeEventListener("click", handleUndo)
       undoBtn?.removeEventListener("click", handleRedo)
     }
@@ -87,10 +81,14 @@ const Canvas = () => {
         onTouchEnd={handleEndDrawing}
         onTouchMove={(e) => { handleDraw(e.changedTouches[0].clientX, e.changedTouches[0].clientY) }}
       />
-      <MiniMap
-        dragging={draging}
-        setMovedMiniMap={setmovedMiniMap}
-      />
+      <MiniMap dragging={draging} />
+      <button
+        className={`absolute bottom-14 right-5 z-10 rounded-xl md:bottom-5 ${draging ? "bg-green-500" : "bg-zinc-300 text-black"
+          } p-3 text-lg text-white`}
+        onClick={() => setDraging((prev) => !prev)}
+      >
+        <BsArrowsMove />
+      </button>
     </div>
   )
 }

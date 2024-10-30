@@ -11,8 +11,8 @@ export const useCtx = () => {
     const newCtx = canvasRef.current?.getContext("2d");
 
     if (newCtx) {
-      // newCtx.lineJoin = "round";
-      // newCtx.lineCap = "round";
+      newCtx.lineJoin = "round";
+      newCtx.lineCap = "round";
       setCtx(newCtx);
     }
   }, [canvasRef]);

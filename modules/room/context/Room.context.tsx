@@ -1,22 +1,21 @@
 import { COLORS_ARRAY } from "@/common/constants";
 import { socket } from "@/common/lib/socket";
 import { useRoom, useSetRoom, useSetUsers } from "@/common/recoil/room/room.hooks";
-import usersAtom, { useUserIds } from "@/common/recoil/users";
 import { Move, User } from "@/common/types/socketTypes";
 import { MotionValue, useMotionValue } from "framer-motion";
-import { createContext, ReactNode, RefObject, useEffect, useRef, useState } from "react";
+import { createContext, Dispatch, ReactNode, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { useSetRecoilState } from "recoil";
 
 export const roomContext = createContext<{
   x: MotionValue<number>
   y: MotionValue<number>
   undoRef: RefObject<HTMLButtonElement>;
   redoRef: RefObject<HTMLButtonElement>;
+  selectionRefs: RefObject<HTMLButtonElement[]>;
   canvasRef: RefObject<HTMLCanvasElement>;
   miniMapRef: RefObject<HTMLCanvasElement>;
-  moveImage: string;
-  setMoveImage: (base64: string) => void;
+  moveImage: { base64: string; x?: number; y?: number; };
+  setMoveImage: Dispatch<SetStateAction<{ base64: string; x?: number | undefined; y?: number | undefined; }>>
 }>(null!)
 
 const RoomContextProvider = ({ children }: { children: ReactNode }) => {
@@ -31,8 +30,9 @@ const RoomContextProvider = ({ children }: { children: ReactNode }) => {
   const redoRef = useRef<HTMLButtonElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const miniMapRef = useRef<HTMLCanvasElement>(null)
+  const selectionRefs = useRef<HTMLButtonElement[]>([])
 
-  const [moveImage, setMoveImage] = useState('')
+  const [moveImage, setMoveImage] = useState<{ base64: string; x?: number; y?: number; }>({ base64: '' })
 
   useEffect(() => {
     socket.on("room", (room, usersMovesoParse, usersToParse) => {
@@ -84,7 +84,7 @@ const RoomContextProvider = ({ children }: { children: ReactNode }) => {
   }, [handleRemoveUser, handleAddUser, setRoom, users])
 
   return (
-    <roomContext.Provider value={{ x, y, undoRef, redoRef, canvasRef, miniMapRef, moveImage, setMoveImage }}>
+    <roomContext.Provider value={{ x, y, undoRef, redoRef, canvasRef, miniMapRef, moveImage, setMoveImage, selectionRefs }}>
       {children}
     </roomContext.Provider>
   )

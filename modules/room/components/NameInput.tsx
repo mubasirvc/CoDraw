@@ -61,7 +61,7 @@ const NameInput = () => {
           id='name'
           placeholder='Enter name'
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value?.slice(0, 15))}
           type="text"
         />
       </div>

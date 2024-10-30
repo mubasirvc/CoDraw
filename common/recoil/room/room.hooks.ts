@@ -37,9 +37,9 @@ export const useSetUsers = () => {
   const handleAddUser = (userId: string, name: string) => {
     setRoom((prev) => {
       const { users: newUsers, usersMoves: newUserMoves } = prev;
-      
-      const color = getColor([...newUsers.values()].pop()?.color)
-      newUsers.set(userId, {name, color});
+
+      const color = getColor([...newUsers.values()].pop()?.color);
+      newUsers.set(userId, { name, color });
       newUserMoves.set(userId, []);
 
       return { ...prev, users: newUsers, usersMoves: newUserMoves };
@@ -98,7 +98,15 @@ export const useMyMoves = () => {
   const [room, setRoom] = useRecoilState(roomAtom);
 
   const handleAddMyMove = (move: Move) => {
-    setRoom((prev) => ({ ...prev, myMoves: [...prev.myMoves, move] }));
+    setRoom((prev) => {
+      if (prev.myMoves[prev.myMoves.length - 1]?.options.mode === "select")
+        return {
+          ...prev,
+          myMoves: [...prev.myMoves.slice(0, prev.myMoves.length - 1), move],
+        };
+
+      return { ...prev, myMoves: [...prev.myMoves, move] };
+    });
   };
 
   const handleRemoveMyMove = () => {
@@ -106,7 +114,7 @@ export const useMyMoves = () => {
     const removedMove = newMoves.pop();
     setRoom((prev) => ({ ...prev, myMoves: newMoves }));
 
-    return removedMove
+    return removedMove;
   };
 
   return { handleAddMyMove, handleRemoveMyMove, myMoves: room.myMoves };

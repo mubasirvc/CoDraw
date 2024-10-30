@@ -28,7 +28,6 @@ const ModePicker = () => {
       >
         <BsPencilFill />
       </button>
-
       <button
         className={`btn-icon text-xl ${options.mode === "eraser" && "bg-green-400"
           }`}

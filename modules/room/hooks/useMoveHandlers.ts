@@ -8,15 +8,18 @@ import { Move } from "@/common/types/socketTypes";
 import { useSetSavedMoves } from "@/common/recoil/savedMoves";
 import { useCtx } from "./useCtx";
 import { useSelection } from "./useSelection";
+import { getStringFromRgba } from "@/common/lib/rgba";
+import { useSetSelection } from "@/common/recoil/options";
 
 let prevMovesLength = 0;
 
-export const useMovesHandlers = () => {
+export const useMovesHandlers = (clearOnYourMove: () => void) => {
   const { canvasRef, miniMapRef } = useRefs();
   const room = useRoom();
   const { handleAddMyMove, handleRemoveMyMove } = useMyMoves();
 
   const ctx = useCtx();
+  const { clearSelection } = useSetSelection();
 
   const { addSavedMove, removeSavedMove } = useSetSavedMoves();
 
@@ -47,70 +50,6 @@ export const useMovesHandlers = () => {
     }
   };
 
-  // useEffect(() => copyCanvasToSmall(), [bg]);
-
-  // const drawMove = (move: Move, image?: HTMLImageElement) => {
-  //   const { path } = move;
-
-  //   if (!ctx || !path.length) return;
-
-  //   const moveOptions = move.options;
-
-  //   if (moveOptions.mode === "select") return;
-
-  //   ctx.lineWidth = moveOptions.lineWidth;
-  //   ctx.strokeStyle = getStringFromRgba(moveOptions.lineColor);
-  //   ctx.fillStyle = getStringFromRgba(moveOptions.fillColor);
-  //   if (moveOptions.mode === "eraser")
-  //     ctx.globalCompositeOperation = "destination-out";
-  //   else ctx.globalCompositeOperation = "source-over";
-
-  //   if (moveOptions.shape === "image" && image)
-  //     ctx.drawImage(image, path[0][0], path[0][1]);
-
-  //   switch (moveOptions.shape) {
-  //     case "line": {
-  //       ctx.beginPath();
-  //       path.forEach(([x, y]) => {
-  //         ctx.lineTo(x, y);
-  //       });
-
-  //       ctx.stroke();
-  //       ctx.closePath();
-  //       break;
-  //     }
-
-  //     case "circle": {
-  //       const { cX, cY, radiusX, radiusY } = move.circle;
-
-  //       ctx.beginPath();
-  //       ctx.ellipse(cX, cY, radiusX, radiusY, 0, 0, 2 * Math.PI);
-  //       ctx.stroke();
-  //       ctx.fill();
-  //       ctx.closePath();
-  //       break;
-  //     }
-
-  //     case "rect": {
-  //       const { width, height } = move.rect;
-
-  //       ctx.beginPath();
-
-  //       ctx.rect(path[0][0], path[0][1], width, height);
-  //       ctx.stroke();
-  //       ctx.fill();
-
-  //       ctx.closePath();
-  //       break;
-  //     }
-
-  //     default:
-  //       break;
-  //   }
-
-  //   copyCanvasToSmall();
-  // };
-
   const drawMove = (move: Move, image?: HTMLImageElement) => {
     const { path } = move;
 
@@ -118,15 +57,18 @@ export const useMovesHandlers = () => {
 
     const moveOptions = move.options;
 
-    if (moveOptions.shape === "image" && image) {
-      ctx?.drawImage(image, path[0][0], path[0][1]);
-    }
+    if (moveOptions.mode == "select") return;
 
     ctx!.lineWidth = moveOptions.lineWidth;
-    ctx!.strokeStyle = moveOptions.lineColor;
+    ctx!.strokeStyle = getStringFromRgba(moveOptions.lineColor);
+    ctx!.fillStyle = getStringFromRgba(moveOptions.fillColor);
     if (moveOptions.mode === "eraser")
       ctx!.globalCompositeOperation = "destination-out";
     else ctx!.globalCompositeOperation = "source-over";
+
+    if (moveOptions.shape === "image" && image) {
+      ctx?.drawImage(image, path[0][0], path[0][1]);
+    }
 
     switch (moveOptions.shape) {
       case "line":
@@ -143,6 +85,7 @@ export const useMovesHandlers = () => {
         ctx?.beginPath();
         ctx?.ellipse(cX, cY, radiusX, radiusY, 0, 0, 2 * Math.PI);
         ctx?.stroke();
+        ctx?.fill();
         ctx?.closePath();
         break;
       }
@@ -150,13 +93,9 @@ export const useMovesHandlers = () => {
         const { width, height } = move.rect;
 
         ctx?.beginPath();
-        if (move.rect.fill) {
-          ctx?.fillRect(path[0][0], path[0][1], width, height);
-          ctx?.fill()
-        }else{
-          ctx?.rect(path[0][0], path[0][1], width, height);
-          ctx?.stroke()
-        }
+        ctx?.rect(path[0][0], path[0][1], width, height);
+        ctx?.stroke();
+        ctx?.fill();
         ctx?.closePath();
         break;
       }
@@ -199,15 +138,15 @@ export const useMovesHandlers = () => {
 
   useEffect(() => {
     socket.on("your_move", (move) => {
-      // clearOnYourMove();
+      clearOnYourMove();
       handleAddMyMove(move);
-      // setTimeout(clearSelection, 100);
+      setTimeout(clearSelection, 100);
     });
 
     return () => {
       socket.off("your_move");
     };
-  }, [handleAddMyMove]);
+  }, [handleAddMyMove, clearOnYourMove, clearSelection]);
 
   useEffect(() => {
     if (prevMovesLength >= sortedMoves.length || !prevMovesLength) {
@@ -230,7 +169,8 @@ export const useMovesHandlers = () => {
   const handleUndo = () => {
     if (ctx) {
       const move = handleRemoveMyMove();
-      if (move) {
+      if (move?.options.mode == "select") clearSelection();
+      else if (move) {
         addSavedMove(move);
         socket.emit("undo");
       }

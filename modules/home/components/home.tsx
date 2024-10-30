@@ -31,13 +31,12 @@ const Home = () => {
       socket.off("created")
       socket.off("joined", handlelJoinedRoom)
     }
-
-    useEffect(() => {
-      socket.emit("leave_room")
-      setAtomRoomId("")
-    }, [setAtomRoomId])
-
   }, [router, setAtomRoomId, router, roomId])
+  
+  useEffect(() => {
+    socket.emit("leave_room")
+    setAtomRoomId("")
+  }, [setAtomRoomId])
 
   const handleCreateRoom = () => {
     socket.emit("create_room", username)
@@ -46,7 +45,7 @@ const Home = () => {
   const handleJoinRoom = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    socket.emit("join_room", roomId, username)
+    if(roomId) socket.emit("join_room", roomId, username)
   }
 
   return (
@@ -64,7 +63,7 @@ const Home = () => {
           id='username'
           placeholder='Enter username'
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value.slice(0, 15))}
           type="text"
         />
       </div>

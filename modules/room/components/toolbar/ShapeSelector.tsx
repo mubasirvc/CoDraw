@@ -35,6 +35,7 @@ const ShapeSelector = () => {
       <button
         className="text-2xl"
         onClick={() => setOpened((prev) => !prev)}
+        disabled={options.mode === "select"}
       >
         {options.shape === "circle" && <BsCircle />}
         {options.shape === "rect" && <BiRectangle />}

@@ -12,12 +12,16 @@ const MousePosition = () => {
   const ref = useRef<HTMLDivElement>(null)
   const { docX, docY } = useMouse(ref)
 
+  const touchDevice = window.matchMedia("(pointer: coarse)").matches
+
   useInterval(() => {
-    if (prevPosition.current.x !== docX || prevPosition.current.y !== docY) {
+    if (prevPosition.current.x !== docX || prevPosition.current.y !== docY && touchDevice) {
       socket.emit("mouse_move", getPos(docX, x), getPos(docY, y))
       prevPosition.current = { x: docX, y: docY }
     }
   }, 150)
+
+  if (touchDevice) return null
 
   return (
     <motion.div

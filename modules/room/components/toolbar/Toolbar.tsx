@@ -7,6 +7,7 @@ import { useRefs } from '../../hooks/useRefs'
 import Router from 'next/router'
 import { CANVAS_SIZE } from '@/common/constants'
 import { ImExit } from "react-icons/im";
+import { IoIosShareAlt } from "react-icons/io";
 import ImageChoser from './ImageChoser'
 import UndoRedoBtn from './UndoRedoBtn'
 import ModePicker from './ModePicker'
@@ -35,7 +36,7 @@ const Toolbar = () => {
 
   return (
     <div
-      className="absolute left-10 mt-56  z-50 grid grid-cols-2 items-center gap-5 rounded-lg bg-zinc-900 p-5 text-white 2xl:grid-cols-1"
+      className="absolute left-10 mt-[350px]  z-50 grid grid-cols-2 items-center gap-5 rounded-lg bg-zinc-900 p-5 text-white 2xl:grid-cols-1"
       style={{ transform: "translateY(-50%" }}
     >
       <UndoRedoBtn />
@@ -45,6 +46,9 @@ const Toolbar = () => {
       <LineWidthPicker />
       <ModePicker />
       <ImageChoser />
+      <button className="btn-icon text-2xl" onClick={() => { }}>
+        <IoIosShareAlt />
+      </button>
       <button className="btn-icon text-2xl" onClick={handleDownload}>
         <HiOutlineDownload />
       </button>
