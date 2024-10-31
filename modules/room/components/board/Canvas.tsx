@@ -11,6 +11,8 @@ import { useDraw } from '../../hooks/useDraw'
 import { useRefs } from '../../hooks/useRefs'
 import { useCtx } from '../../hooks/useCtx'
 import { BsArrowsMove } from 'react-icons/bs'
+import Audio from '../toolbar/Audio'
+import UndoRedoBtn from '../toolbar/UndoRedoBtn'
 
 const Canvas = () => {
   const { undoRef, canvasRef, redoRef } = useRefs()
@@ -59,7 +61,7 @@ const Canvas = () => {
   return (
     <div className='relative h-full w-full overflow-hidden'>
       <motion.canvas
-        className={`z-10 bg-zinc-300 ${draging && 'cursor-move'}`}
+        className={`top-0 z-10 ${draging && "cursor-move"}`}
         ref={canvasRef}
         width={CANVAS_SIZE.width}
         height={CANVAS_SIZE.height}
@@ -81,9 +83,14 @@ const Canvas = () => {
         onTouchEnd={handleEndDrawing}
         onTouchMove={(e) => { handleDraw(e.changedTouches[0].clientX, e.changedTouches[0].clientY) }}
       />
-      <MiniMap dragging={draging} />
+      {/* <MiniMap dragging={draging} /> */}
+      <UndoRedoBtn />
+      <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2">
+        <Audio />
+      </div>
+
       <button
-        className={`absolute bottom-14 right-5 z-10 rounded-xl md:bottom-5 ${draging ? "bg-green-500" : "bg-zinc-300 text-black"
+        className={`fixed bottom-14 right-5 z-10 rounded-xl md:bottom-5 ${draging ? "bg-green-500" : "bg-zinc-300 text-black"
           } p-3 text-lg text-white`}
         onClick={() => setDraging((prev) => !prev)}
       >
