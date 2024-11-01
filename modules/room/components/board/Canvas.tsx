@@ -13,6 +13,8 @@ import { useCtx } from '../../hooks/useCtx'
 import { BsArrowsMove } from 'react-icons/bs'
 import Audio from '../toolbar/Audio'
 import UndoRedoBtn from '../toolbar/UndoRedoBtn'
+import ExitShareDwnldBtn from '../toolbar/ExitShareDwnldBtn'
+import ShapeSelector from '../toolbar/ShapeSelector'
 
 const Canvas = () => {
   const { undoRef, canvasRef, redoRef } = useRefs()
@@ -85,6 +87,8 @@ const Canvas = () => {
       />
       {/* <MiniMap dragging={draging} /> */}
       <UndoRedoBtn />
+      <ExitShareDwnldBtn />
+      <ShapeSelector />
       <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2">
         <Audio />
       </div>
