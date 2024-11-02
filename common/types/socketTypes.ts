@@ -69,6 +69,7 @@ export interface ServerToClientEvents {
   mouse_moved: (x: number, y: number, userId: string) => void;
   new_user: (userId: string, username: string) => void;
   user_disconnected: (userId: string) => void;
+  user_toggled_mic: (userId: string, isMicOn: boolean) => void;
 }
 
 export interface ClientToServerEvents {
@@ -81,4 +82,5 @@ export interface ClientToServerEvents {
   joined_room: () => void;
   leave_room: () => void;
   send_msg: (msg: string) => void;
+  toggle_mic: (roomId: string, isMicOn: boolean) => void;
 }

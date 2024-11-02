@@ -30,7 +30,7 @@ const MousePosition = () => {
       animate={{ x: docX + 15, y: docY + 15 }}
       transition={{ duration: 0.05, ease: "linear" }}
     >
-      {getPos(docX, x).toFixed(0)}| {getPos(docY, y).toFixed(0)}
+      {/* {getPos(docX, x).toFixed(0)}| {getPos(docY, y).toFixed(0)} */}
     </motion.div>
   )
 }

@@ -1,6 +1,6 @@
 import { socket } from '@/common/lib/socket'
 import React, { FormEvent, useState } from 'react'
-import { AiOutlineSend } from 'react-icons/ai'
+import { FiSend } from "react-icons/fi";
 
 const ChatInput = () => {
   const [msg, setMsg] = useState('')
@@ -13,15 +13,15 @@ const ChatInput = () => {
   }
 
   return (
-    <form className='flex w-full items-center gap-1' onSubmit={handleSubmit}>
+    <form className='flex w-full items-center' onSubmit={handleSubmit}>
       <input
-        className='w-full rounded-xl border border-zinc-300 p-5 py-1'
+        className='w-full rounded-s-xl border border-zinc-300 p-5 py-1 h-10'
         type="text"
         value={msg}
         onChange={(e) => setMsg(e.target.value)}
       />
-      <button className='h-full w-10 bg-black' type='submit'>
-        <AiOutlineSend />
+      <button className='h-full w-10 border-2 border-l-0 rounded-r-xl' type='submit'>
+        <FiSend className='pl-2 text-2xl'/>
       </button>
     </form>
   )

@@ -12,9 +12,7 @@ import { useRefs } from '../../hooks/useRefs'
 import { useCtx } from '../../hooks/useCtx'
 import { BsArrowsMove } from 'react-icons/bs'
 import Audio from '../toolbar/Audio'
-import UndoRedoBtn from '../toolbar/UndoRedoBtn'
-import ExitShareDwnldBtn from '../toolbar/ExitShareDwnldBtn'
-import ShapeSelector from '../toolbar/ShapeSelector'
+import Toolbar from '../toolbar/Toolbar'
 
 const Canvas = () => {
   const { undoRef, canvasRef, redoRef } = useRefs()
@@ -86,15 +84,12 @@ const Canvas = () => {
         onTouchMove={(e) => { handleDraw(e.changedTouches[0].clientX, e.changedTouches[0].clientY) }}
       />
       {/* <MiniMap dragging={draging} /> */}
-      <UndoRedoBtn />
-      <ExitShareDwnldBtn />
-      <ShapeSelector />
       <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2">
         <Audio />
       </div>
 
       <button
-        className={`fixed bottom-14 right-5 z-10 rounded-xl md:bottom-5 ${draging ? "bg-green-500" : "bg-zinc-300 text-black"
+        className={`fixed bottom-14 left-5 z-10 rounded-xl md:bottom-5 ${draging ? "bg-green-500" : "bg-zinc-300 text-black"
           } p-3 text-lg text-white`}
         onClick={() => setDraging((prev) => !prev)}
       >

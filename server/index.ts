@@ -129,7 +129,7 @@ nextApp.prepare().then(async () => {
       const roomId = getRoomId();
       const timestamp = Date.now();
 
-      move.id = uuid()
+      move.id = uuid();
 
       addMove(roomId, socket.id, { ...move, timestamp });
 
@@ -157,12 +157,22 @@ nextApp.prepare().then(async () => {
       socket.broadcast.to(roomId).emit("mouse_moved", x, y, socket.id);
     });
 
+    socket.on("toggle_mic", (roomId, isMicOn) => {
+      socket.broadcast.to(roomId).emit("user_toggled_mic", socket.id, isMicOn);
+    });
+
+    socket.on("disconnecting", () => {
+      const roomId = getRoomId();
+      socket.broadcast.to(roomId).emit("user_toggled_mic", socket.id, false);
+    });
+
     socket.on("disconnecting", () => {
       const roomId = getRoomId();
       leavRoom(roomId, socket.id);
       io.to(roomId).emit("user_disconnected", socket.id);
     });
   });
+
   app.all("*", (req: Request, res: Response) => {
     return nextApiHandler(req, res);
   });

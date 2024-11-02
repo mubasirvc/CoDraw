@@ -1,26 +1,26 @@
-import { socket } from '@/common/lib/socket'
-import { useRoom } from '@/common/recoil/room'
-import { Message } from '@/common/types/socketTypes'
-import React, { use, useEffect, useRef, useState } from 'react'
-import { useList } from 'react-use'
+import { socket } from '@/common/lib/socket';
+import { useRoom } from '@/common/recoil/room';
+import { Message } from '@/common/types/socketTypes';
+import React, { useEffect, useRef, useState } from 'react';
+import { useList } from 'react-use';
 import { motion } from "framer-motion";
-import { BsFillChatFill } from "react-icons/bs";
-import { FaChevronDown } from "react-icons/fa";
-import { DEFAULT_EASE } from '@/common/constants'
-import ChatMessage from './ChatMessage'
-import ChatInput from './ChatInput' 
+import { FaChevronUp } from "react-icons/fa";
+import { DEFAULT_EASE } from '@/common/constants';
+import ChatMessage from './ChatMessage';
+import ChatInput from './ChatInput';
+import { MdOutlineMarkChatUnread, MdOutlineChatBubbleOutline } from "react-icons/md";
 
 const Chat = () => {
-  const { users } = useRoom()
-  const msgListRef = useRef<HTMLDivElement>(null)
+  const { users } = useRoom();
+  const msgListRef = useRef<HTMLDivElement>(null);
 
-  const [newMsg, setNewMsg] = useState(false)
-  const [opened, setOpened] = useState(false)
-  const [msgs, setMsgs] = useList<Message>([])
+  const [newMsg, setNewMsg] = useState(false);
+  const [opened, setOpened] = useState(false);
+  const [msgs, setMsgs] = useList<Message>([]);
 
   useEffect(() => {
     const handleNewMsg = (userId: string, msg: string) => {
-      const user = users.get(userId)
+      const user = users.get(userId);
 
       setMsgs.push({
         userId,
@@ -28,60 +28,103 @@ const Chat = () => {
         id: msgs.length + 1,
         username: user?.name || "Anonymous",
         color: user?.color || "#000"
-      })
+      });
 
-      msgListRef.current?.scroll({ top: msgListRef.current?.scrollHeight })
+      msgListRef.current?.scroll({ top: msgListRef.current?.scrollHeight });
 
-      if (!opened) setNewMsg(true)
-    }
+      if (!opened) setNewMsg(true);
+    };
 
-    socket.on("new_msg", handleNewMsg)
+    socket.on("new_msg", handleNewMsg);
 
     return () => {
-      socket.off("new_msg", handleNewMsg)
-    }
-  }, [setMsgs, msgs, opened, users])
+      socket.off("new_msg", handleNewMsg);
+    };
+  }, [setMsgs, msgs, opened, users]);
 
   return (
     <motion.div
-      className="absolute bottom-0 z-50 flex h-[300px] w-full flex-col overflow-hidden rounded-t-md sm:left-36 sm:w-[30rem]"
-      animate={{ y: opened ? 0 : 260 }}
-      transition={{ ease: DEFAULT_EASE, duration: 0.2 }}
+      className={`${opened ? 'h-[60%]' : 'h-14 w-14'} fixed right-5 bottom-2 z-50 flex flex-col overflow-hidden transition-all`}
+      animate={{
+        height: opened ? "60%" : "3.5rem",
+        width: opened ? "25%" : "3.5rem",
+        borderRadius: "0.5rem",
+      }}
+      transition={{ ease: DEFAULT_EASE, duration: 0.3 }}
     >
       <button
-        className="flex w-full cursor-pointer items-center justify-between bg-zinc-900 py-2 px-10 font-semibold text-white"
+        className={`flex ${opened ? 'justify-between w-full' : 'justify-center'} cursor-pointer items-center gap-1 bg-zinc-900 py-2 px-2 font-semibold text-white`}
         onClick={() => {
           setOpened((prev) => !prev);
           setNewMsg(false);
         }}
+        style={{
+          borderRadius: "0.5rem",
+        }}
       >
-        <div className="flex items-center gap-2">
-          <BsFillChatFill className="mt-[-2px]" />
-          Chat
-          {newMsg && (
-            <p className="rounded-md bg-green-500 px-1 font-semibold text-green-900">
-              New!
-            </p>
-          )}
-        </div>
-
         <motion.div
-          animate={{ rotate: opened ? 0 : 180 }}
+          animate={{ rotate: opened ? 180 : 0 }}
           transition={{ ease: DEFAULT_EASE, duration: 0.2 }}
         >
-          <FaChevronDown />
+          <FaChevronUp className='opacity-80 text-sm' />
         </motion.div>
+        {opened ? (
+          <>
+            <div className="flex items-center gap-2 text-2xl">
+              {newMsg ? (
+                <motion.div
+                  initial={{ scale: 1 }}
+                  animate={{
+                    scale: [1, 1.1, 1],
+                  }}
+                  transition={{
+                    duration: 0.8,
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                    ease: "easeInOut"
+                  }}
+                >
+                  <MdOutlineMarkChatUnread className='text-green-400' />
+                </motion.div>
+              ) : (
+                <MdOutlineChatBubbleOutline />
+              )}
+            </div>
+          </>
+        ) : (
+          newMsg ? (
+            <motion.div
+              initial={{ scale: 1 }}
+              animate={{
+                scale: [1, 1.1, 1],
+              }}
+              transition={{
+                duration: 0.5,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut"
+              }}
+            >
+              <MdOutlineMarkChatUnread className='text-green-400 text-xl' />
+            </motion.div>
+          ) : (
+            <MdOutlineChatBubbleOutline className='text-xl' />
+          )
+        )}
       </button>
-      <div className="flex flex-1 flex-col justify-between bg-white p-3">
-        <div className="h-[190px] overflow-y-scroll pr-2" ref={msgListRef}>
-          {msgs.map((msg) => (
-            <ChatMessage key={msg.id} {...msg} />
-          ))}
-        </div>
-        <ChatInput />
-      </div>
-    </motion.div>
-  )
-}
 
-export default Chat
+      {opened && (
+        <div className="flex flex-1 flex-col justify-between bg-gray-100 p-3 rounded-b-md">
+          <div className={`flex-1 overflow-y-scroll pr-2`} ref={msgListRef}>
+            {msgs.map((msg) => (
+              <ChatMessage key={msg.id} {...msg} />
+            ))}
+          </div>
+          <ChatInput />
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+export default Chat;

@@ -1,10 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-
 import { motion, useMotionValue } from "framer-motion";
-
 import { CANVAS_SIZE } from "@/common/constants";
 import { useViewportSize } from "@/common/hooks/useViewPortSize";
-
 import { useBoardPosition } from "../../hooks/useBoardPosition";
 import { useRefs } from "../../hooks/useRefs";
 
@@ -24,7 +21,7 @@ const MiniMap = ({ dragging }: { dragging: boolean }) => {
       return unsubscribe;
     }
 
-    return () => {};
+    return () => { };
   }, [boardPos.x, draggingMinimap]);
 
   useEffect(() => {
@@ -33,7 +30,7 @@ const MiniMap = ({ dragging }: { dragging: boolean }) => {
       return unsubscribe;
     }
 
-    return () => {};
+    return () => { };
   }, [boardPos.y, draggingMinimap]);
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -49,10 +46,10 @@ const MiniMap = ({ dragging }: { dragging: boolean }) => {
   }, [width]);
 
   useEffect(() => {
-    miniX.onChange((newX) => {
+    miniX.on("change", (newX) => {
       if (!dragging) boardPos.x.set(Math.floor(-newX * divider));
     });
-    miniY.onChange((newY) => {
+    miniY.on("change", (newY) => {
       if (!dragging) boardPos.y.set(Math.floor(-newY * divider));
     });
 

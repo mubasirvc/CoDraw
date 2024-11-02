@@ -7,8 +7,8 @@ const Eraser = () => {
 
   return (
     <button
-      className={`text-xl ${options.erase && 'bg-green-400'}`}
-      onClick={() => setOptions(prev => ({ ...prev, erase: !prev.erase }))}
+      className={`text-xl ${options.mode === 'eraser' && 'bg-green-400'}`}
+      onClick={() => setOptions(prev => ({ ...prev, mode: 'eraser' }))}
     >
       <FaEraser />
     </button>
