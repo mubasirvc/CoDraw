@@ -1,18 +1,18 @@
-import { useOptions } from '@/common/recoil/options'
-import React from 'react'
-import { FaEraser } from 'react-icons/fa'
+// import { useOptions } from '@/common/redux/options'
+// import React from 'react'
+// import { FaEraser } from 'react-icons/fa'
 
-const Eraser = () => {
-  const [options, setOptions] = useOptions()
+// const Eraser = () => {
+//   const [options, setOptions] = useOptions()
 
-  return (
-    <button
-      className={`text-xl ${options.mode === 'eraser' && 'bg-green-400'}`}
-      onClick={() => setOptions(prev => ({ ...prev, mode: 'eraser' }))}
-    >
-      <FaEraser />
-    </button>
-  )
-}
+//   return (
+//     <button
+//       className={`text-xl ${options.mode === 'eraser' && 'bg-green-400'}`}
+//       onClick={() => setOptions(prev => ({ ...prev, mode: 'eraser' }))}
+//     >
+//       <FaEraser />
+//     </button>
+//   )
+// }
 
-export default Eraser
+// export default Eraser

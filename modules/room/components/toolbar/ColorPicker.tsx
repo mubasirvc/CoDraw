@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { RgbaColorPicker } from "react-colorful";
 import { useClickAway } from "react-use";
 
-import { useOptions } from "@/common/recoil/options/options.hooks";
 import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
 import { BsPaletteFill } from "react-icons/bs";
+import { useOptions } from "@/common/redux/options";
 
 const ColorPicker = () => {
   const [options, setOptions] = useOptions();

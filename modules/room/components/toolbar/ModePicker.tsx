@@ -3,8 +3,7 @@ import { useEffect } from "react";
 import { AiOutlineSelect } from "react-icons/ai";
 import { BsPencilFill } from "react-icons/bs";
 import { FaEraser } from "react-icons/fa";
-
-import { useOptions, useSetSelection } from "@/common/recoil/options";
+import { useOptions, useSetSelection } from "@/common/redux/options";
 
 const ModePicker = () => {
   const [options, setOptions] = useOptions();
@@ -17,13 +16,12 @@ const ModePicker = () => {
   return (
     <>
       <button
-        className={`btn-icon text-xl ${options.mode === "draw" && "bg-green-400"
-          }`}
+        className={`btn-icon text-xl ${options.mode === "draw" && "bg-green-400"}`}
         onClick={() => {
-          setOptions((prev) => ({
-            ...prev,
+          setOptions({
+            ...options,
             mode: "draw",
-          }));
+          });
         }}
       >
         <BsPencilFill />
@@ -32,23 +30,22 @@ const ModePicker = () => {
         className={`btn-icon text-xl ${options.mode === "eraser" && "bg-green-400"
           }`}
         onClick={() => {
-          setOptions((prev) => ({
-            ...prev,
+          setOptions({
+            ...options,
             mode: "eraser",
-          }));
+          });
         }}
       >
         <FaEraser />
       </button>
 
       <button
-        className={`btn-icon text-2xl ${options.mode === "select" && "bg-green-400"
-          }`}
+        className={`btn-icon text-2xl ${options.mode === "select" && "bg-green-400"}`}
         onClick={() => {
-          setOptions((prev) => ({
-            ...prev,
+          setOptions({
+            ...options,
             mode: "select",
-          }));
+          });
         }}
       >
         <AiOutlineSelect />

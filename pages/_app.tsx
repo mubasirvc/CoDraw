@@ -4,12 +4,14 @@ import { ToastContainer } from "react-toastify";
 import { RecoilRoot } from "recoil";
 
 import "react-toastify/dist/ReactToastify.min.css"
+import { Provider } from "react-redux";
+import store from "@/common/redux/store";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <RecoilRoot>
+    <Provider store={store}>
       <ToastContainer />
       <Component {...pageProps} />
-    </RecoilRoot>
+    </Provider>
   );
 }

@@ -1,18 +1,16 @@
 import { useBoardPosition } from "./useBoardPosition";
 import { useEffect, useState } from "react";
-import {
-  useOptionsValue,
-  useSetSelection,
-} from "@/common/recoil/options/options.hooks";
 import { socket } from "@/common/lib/socket";
 import { getPos } from "@/common/lib/getPos";
 import { Move } from "@/common/types/socketTypes";
 import { drawCircle, drawLine, drawRect } from "../helpers/canvas.helper";
 import { DEFAULT_MOVE } from "@/common/constants";
-import { useSetSavedMoves } from "@/common/recoil/savedMoves";
 import { useCtx } from "./useCtx";
 import { getStringFromRgba } from "@/common/lib/rgba";
-import { useMyMoves } from "@/common/recoil/room";
+import { useOptionsValue, useSetSelection } from "@/common/redux/options";
+import { useMyMoves } from "@/common/redux/room";
+import { useSetSavedMoves } from "@/common/redux/savedMoves/savedMoves.hooks";
+
 
 let tempMoves: [number, number][] = [];
 let tempCircle = DEFAULT_MOVE.circle;

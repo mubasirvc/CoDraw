@@ -3,13 +3,13 @@ import RoomContextProvider from '../context/Room.context'
 import Canvas from './board/Canvas'
 import MousePosition from './board/MousePosition'
 import MouseRender from './board/MouseRender'
-import { useRoom } from '@/common/recoil/room'
 import NameInput from './NameInput'
 import UsersList from './UsersList'
 import Chat from './chat/Chat'
 import MoveImage from './board/MoveImage'
 import SelectionBtns from './board/SelctionBtns'
 import Toolbar from './toolbar/Toolbar'
+import { useRoom } from '@/common/redux/room'
 
 const Room = () => {
   const room = useRoom()

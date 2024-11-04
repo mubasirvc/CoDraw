@@ -1,6 +1,6 @@
 import { COLORS_ARRAY } from "@/common/constants";
 import { socket } from "@/common/lib/socket";
-import { useRoom, useSetRoom, useSetUsers } from "@/common/recoil/room/room.hooks";
+import { useRoom, useSetRoom, useSetUsers } from "@/common/redux/room";
 import { Move, User } from "@/common/types/socketTypes";
 import { MotionValue, useMotionValue } from "framer-motion";
 import { createContext, Dispatch, ReactNode, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
@@ -52,12 +52,11 @@ const RoomContextProvider = ({ children }: { children: ReactNode }) => {
         })
       })
 
-      setRoom(prev => ({
-        ...prev,
+      setRoom({
         users: newUsers,
         usersMoves,
         movesWithoutUser: room.drawed,
-      }))
+      });
     })
 
     socket.on("new_user", (userId, username) => {

@@ -1,7 +1,7 @@
 import React from 'react'
 import UserMouse from './UserMouse';
-import { useRoom } from '@/common/recoil/room';
 import { socket } from '@/common/lib/socket';
+import { useRoom } from '@/common/redux/room';
 
 const MouseRender = () => {
   const { users } = useRoom()

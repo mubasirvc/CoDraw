@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BsBorderWidth } from "react-icons/bs";
 import { useClickAway } from "react-use";
-import { useOptions } from "@/common/recoil/options";
+import { useOptions } from "@/common/redux/options";
 
 const LineWidthPicker = () => {
   const [options, setOptions] = useOptions();
@@ -36,10 +36,10 @@ const LineWidthPicker = () => {
               max={20}
               value={options.lineWidth}
               onChange={(e) =>
-                setOptions((prev) => ({
-                  ...prev,
+                setOptions({
+                  ...options,
                   lineWidth: parseInt(e.target.value, 10),
-                }))
+                })
               }
               className="h-4 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
             />
