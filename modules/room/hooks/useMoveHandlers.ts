@@ -5,9 +5,9 @@ import { Move } from "@/common/types/socketTypes";
 import { useCtx } from "./useCtx";
 import { useSelection } from "./useSelection";
 import { getStringFromRgba } from "@/common/lib/rgba";
-import { useSetSelection } from "@/common/recoil/options";
 import { useMyMoves, useRoom } from "@/common/redux/room";
 import { useSetSavedMoves } from "@/common/redux/savedMoves/savedMoves.hooks";
+import { useSetSelection } from "@/common/redux/options";
 
 let prevMovesLength = 0;
 

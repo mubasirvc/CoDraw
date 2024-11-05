@@ -1,8 +1,6 @@
 import { AiOutlineDelete } from "react-icons/ai";
 import { BsArrowsMove } from "react-icons/bs";
 import { FiCopy } from "react-icons/fi";
-
-
 import { useRefs } from "../../hooks/useRefs";
 import { useOptionsValue } from "@/common/redux/options";
 

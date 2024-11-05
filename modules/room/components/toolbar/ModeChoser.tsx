@@ -4,6 +4,7 @@ import { BsPencilFill } from "react-icons/bs";
 import { useClickAway } from "react-use";
 import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
 import { FaEraser } from "react-icons/fa";
+import { PiTextAaBold } from "react-icons/pi";
 import { AiOutlineSelect } from "react-icons/ai";
 import { useOptions } from "@/common/redux/options";
 
@@ -17,7 +18,7 @@ const ModeChoser = () => {
 
   useClickAway(drewingBtnRef, () => setOpened(false));
 
-  const handleModeChange = (mode: 'draw' | 'eraser' | 'select') => {
+  const handleModeChange = (mode: 'draw' | 'eraser' | 'select' | 'type') => {
     setOptions({
       ...options,
       mode,
@@ -35,6 +36,7 @@ const ModeChoser = () => {
         {options.mode === "draw" && <BsPencilFill />}
         {options.mode === "eraser" && <FaEraser />}
         {options.mode === "select" && <AiOutlineSelect />}
+        {options.mode === "type" && <PiTextAaBold />}
       </button>
 
       <AnimatePresence>
@@ -51,6 +53,12 @@ const ModeChoser = () => {
               onClick={() => handleModeChange('draw')}
             >
               <BsPencilFill />
+            </button>
+            <button
+              className={`text-xl ${options.mode === "type" && "text-green-400"}`}
+              onClick={() => handleModeChange('type')}
+            >
+              <PiTextAaBold />
             </button>
 
             <button

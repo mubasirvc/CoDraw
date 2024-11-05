@@ -23,7 +23,7 @@ const roomSlice = createSlice({
     },
 
     updateRoom(state, action: PayloadAction<Partial<ClientRoom>>) {
-      Object.assign(state, action.payload); // Merge updates into the current state
+      Object.assign(state, action.payload);
     },
 
     addUser(state, action: PayloadAction<{ userId: string; name: string }>) {
