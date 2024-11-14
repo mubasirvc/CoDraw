@@ -10,7 +10,7 @@ import { getStringFromRgba } from "@/common/lib/rgba";
 import { useOptionsValue, useSetSelection } from "@/common/redux/options";
 import { useMyMoves } from "@/common/redux/room";
 import { useSetSavedMoves } from "@/common/redux/savedMoves/savedMoves.hooks";
-
+import { Canvas, Rect } from "fabric";
 
 let tempMoves: [number, number][] = [];
 let tempCircle = DEFAULT_MOVE.circle;
@@ -19,45 +19,79 @@ let tempImgData: ImageData | undefined;
 
 export const useDraw = (blocked: boolean) => {
   const ctx = useCtx();
-
   const options = useOptionsValue();
   const [drawing, setDrawing] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [textPosition, setTextPosition] = useState({ x: 0, y: 0 });
 
   const { x: movedX, y: movedY } = useBoardPosition();
   const { clearSavedMoves } = useSetSavedMoves();
   const { handleAddMyMove } = useMyMoves();
   const { setSelection, clearSelection } = useSetSelection();
 
+  const [showCursor, setShowCursor] = useState(true);
+
+  useEffect(() => {
+    if (isTyping) {
+      const cursorBlink = setInterval(
+        () => setShowCursor((prev) => !prev),
+        500
+      );
+      return () => clearInterval(cursorBlink);
+    }
+  }, [isTyping]);
+
   const setCxtOptions = () => {
     if (ctx) {
       ctx.lineWidth = options.lineWidth;
       ctx.strokeStyle = getStringFromRgba(options.lineColor);
       ctx.fillStyle = getStringFromRgba(options.fillColor);
-      if (options.mode === "eraser")
-        ctx.globalCompositeOperation = "destination-out";
-      else ctx.globalCompositeOperation = "source-over";
+      ctx.globalCompositeOperation =
+        options.mode === "eraser" ? "destination-out" : "source-over";
     }
   };
 
   const drawAndSet = () => {
-    if (!tempImgData) {
-      tempImgData = ctx?.getImageData(
-        0,
-        0,
-        ctx.canvas.width,
-        ctx.canvas.height
-      );
+    if (tempImgData) {
+      console.log("Restoring previous image data");
+      ctx?.putImageData(tempImgData, 0, 0);
+    } else if (ctx) {
+      console.log("Saving canvas state for future restoration");
+      tempImgData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
     }
-
-    if (tempImgData) ctx?.putImageData(tempImgData, 0, 0);
   };
 
-  const handleStartDrawing = (x: number, y: number) => {
+  const handleStartDrawing = (
+    x: number,
+    y: number,
+    // setInputPosition: (pos: { x: number; y: number }) => void,
+    // setInputVisible: (val: boolean) => void,
+    // setText: (val: string) => void,
+    // setIsTyping: (val: boolean) => void,
+  ) => {
     if (!ctx || blocked) return;
 
     const finalX = getPos(x, movedX);
     const finalY = getPos(y, movedY);
 
+    // if (options.mode === "type") {
+    //   console.log("Entering typing mode");
+    //   setTextPosition({ x: finalX, y: finalY });
+    //   setText("");
+    //   setIsTyping(true);
+    //   return;
+    // }
+
+    // if (options.mode === "type") {
+    //   console.log("Entering typing mode");
+    //   setInputPosition({ x: finalX, y: finalY });
+    //   setText(""); // Reset text state
+    //   setInputVisible(true); // Show the input field
+    //   setIsTyping(true);
+    //   return;
+    // }
+
+    setIsTyping(false);
     setDrawing(true);
     setCxtOptions();
     drawAndSet();
@@ -77,7 +111,7 @@ export const useDraw = (blocked: boolean) => {
   };
 
   const handleEndDrawing = () => {
-    if (!ctx || blocked) return;
+    if (!ctx || blocked || options.mode === "type") return;
 
     setDrawing(false);
     ctx.closePath();
@@ -124,25 +158,24 @@ export const useDraw = (blocked: boolean) => {
   };
 
   const handleDraw = (x: number, y: number, shift?: boolean) => {
-    if (!ctx || !drawing || blocked) return;
+    if (!ctx || !drawing || blocked || isTyping) return;
 
     const finalX = getPos(x, movedX);
     const finalY = getPos(y, movedY);
     drawAndSet();
+
     if (options.mode === "select") {
       ctx.fillStyle = "rgba(0,0,0,0.2)";
-
       drawRect(ctx, tempMoves[0], finalX, finalY, false, true);
       tempMoves.push([finalX, finalY]);
 
       setCxtOptions();
       return;
     }
+
     switch (options.shape) {
       case "line":
-        if (shift) {
-          tempMoves = tempMoves.slice(0, 1);
-        }
+        if (shift) tempMoves = tempMoves.slice(0, 1);
         drawLine(ctx, tempMoves[0], finalX, finalY, shift);
         tempMoves.push([finalX, finalY]);
         break;
@@ -156,6 +189,59 @@ export const useDraw = (blocked: boolean) => {
         break;
     }
   };
+
+  // const handleKeyPress = (e: KeyboardEvent) => {
+  //   if (!isTyping || !ctx) return;
+
+  //   if (e.key === " ") e.preventDefault();
+
+  //   if (e.key === "Enter") {
+  //     tempMoves.push([textPosition.x, textPosition.y]);
+  //     setIsTyping(false);
+
+  //     // Save the image state with the finalized text
+  //     tempImgData = ctx.getImageData(0, 0, ctx.canvas.width, ctx.canvas.height);
+  //   } else {
+  //     drawTextPreview(e.key);
+  //     setText((prev) =>
+  //       e.key === "Backspace" ? prev.slice(0, -1) : prev + e.key
+  //     );
+  //   }
+  // };
+
+  // const drawTextPreview = (latestKey: string) => {
+
+  //   if (!ctx) return;
+
+  //   const previewText =
+  //     latestKey === "Backspace" ? text.slice(0, -1) : text + latestKey;
+
+  //   drawAndSet();
+
+  //   ctx.font = "20px sans serif";
+  //   ctx.textBaseline = "top";
+  //   ctx.fillStyle = "black";
+  //   ctx.fillText(previewText, textPosition.x, textPosition.y);
+
+  //   // Draw a dynamic rectangle around the text (optional)
+  //   const textWidth = ctx.measureText(previewText).width;
+  //   const textHeight = 20; // Approximate line height
+
+  //   // Draw a blinking cursor
+  //   if (showCursor) {
+  //     ctx.beginPath();
+  //     ctx.moveTo(textPosition.x + textWidth + 2, textPosition.y);
+  //     ctx.lineTo(textPosition.x + textWidth + 2, textPosition.y + textHeight);
+  //     ctx.strokeStyle = "black";
+  //     ctx.stroke();
+  //   }
+  // };
+
+  // Listen for keypress events
+  // useEffect(() => {
+  //   window.addEventListener("keydown", handleKeyPress);
+  //   return () => window.removeEventListener("keydown", handleKeyPress);
+  // }, [isTyping, text, textPosition]);
 
   return {
     handleEndDrawing,
