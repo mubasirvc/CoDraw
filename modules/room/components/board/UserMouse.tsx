@@ -3,7 +3,7 @@ import { useBoardPosition } from '../../hooks/useBoardPosition'
 import { socket } from '@/common/lib/socket'
 import { motion } from 'framer-motion'
 import { BsCursorFill } from 'react-icons/bs'
-import { useRoom } from '@/common/recoil/room'
+import { useRoom } from '@/common/redux/room'
 
 const UserMouse = ({ userId }: { userId: string }) => {
   const boardPos = useBoardPosition()

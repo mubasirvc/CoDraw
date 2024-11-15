@@ -1,10 +1,8 @@
 
 import { motion, useMotionValue } from "framer-motion";
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
-
 import { getPos } from "@/common/lib/getPos";
 import { socket } from "@/common/lib/socket";
-
 import { useBoardPosition } from "../../hooks/useBoardPosition";
 import { useMoveImage } from "../../hooks/useMoveImage";
 import { useRefs } from "../../hooks/useRefs";

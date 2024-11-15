@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { socket } from "@/common/lib/socket";
 import { Move } from "@/common/types/socketTypes";
-import { useSetUsers } from "@/common/recoil/room";
+import { useSetUsers } from "@/common/redux/room";
 
 export const useSocketDraw = (drawing: boolean) => {
   const { handleAddMoveToUser, handleRemoveMoveFromUser } = useSetUsers();

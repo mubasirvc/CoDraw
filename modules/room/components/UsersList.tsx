@@ -1,4 +1,4 @@
-import { useRoom } from '@/common/recoil/room'
+import { useRoom } from '@/common/redux/room'
 import React from 'react'
 
 const UsersList = () => {

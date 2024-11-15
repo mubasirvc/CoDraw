@@ -2,10 +2,11 @@ import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BsPencilFill } from "react-icons/bs";
 import { useClickAway } from "react-use";
-import { useOptions } from "@/common/recoil/options";
 import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
 import { FaEraser } from "react-icons/fa";
+import { PiTextAaBold } from "react-icons/pi";
 import { AiOutlineSelect } from "react-icons/ai";
+import { useOptions } from "@/common/redux/options";
 
 
 const ModeChoser = () => {
@@ -17,11 +18,11 @@ const ModeChoser = () => {
 
   useClickAway(drewingBtnRef, () => setOpened(false));
 
-  const handleModeChange = (mode: 'draw' | 'eraser' | 'select') => {
-    setOptions((prev) => ({
-      ...prev,
+  const handleModeChange = (mode: 'draw' | 'eraser' | 'select' | 'type') => {
+    setOptions({
+      ...options,
       mode,
-    }));
+    });
 
     setOpened(false);
   };
@@ -35,6 +36,7 @@ const ModeChoser = () => {
         {options.mode === "draw" && <BsPencilFill />}
         {options.mode === "eraser" && <FaEraser />}
         {options.mode === "select" && <AiOutlineSelect />}
+        {options.mode === "type" && <PiTextAaBold />}
       </button>
 
       <AnimatePresence>
@@ -52,10 +54,16 @@ const ModeChoser = () => {
             >
               <BsPencilFill />
             </button>
+            <button
+              className={`text-xl ${options.mode === "type" && "text-green-400"}`}
+              onClick={() => handleModeChange('type')}
+            >
+              <PiTextAaBold />
+            </button>
 
             <button
               className={`text-xl ${options.mode === "eraser" && "text-green-400"}`}
-              onClick={() => handleModeChange('eraser') }
+              onClick={() => handleModeChange('eraser')}
             >
               <FaEraser />
             </button>

@@ -1,5 +1,4 @@
 import { socket } from '@/common/lib/socket';
-import { useRoom } from '@/common/recoil/room';
 import { Message } from '@/common/types/socketTypes';
 import React, { useEffect, useRef, useState } from 'react';
 import { useList } from 'react-use';
@@ -9,6 +8,7 @@ import { DEFAULT_EASE } from '@/common/constants';
 import ChatMessage from './ChatMessage';
 import ChatInput from './ChatInput';
 import { MdOutlineMarkChatUnread, MdOutlineChatBubbleOutline } from "react-icons/md";
+import { useRoom } from '@/common/redux/room';
 
 const Chat = () => {
   const { users } = useRoom();

@@ -1,12 +1,12 @@
 import { useEffect, useMemo } from "react";
 import { toast } from "react-toastify";
 import { socket } from "@/common/lib/socket";
-import { useOptionsValue } from "@/common/recoil/options";
 import { useCtx } from "./useCtx";
 import { useMoveImage } from "./useMoveImage";
 import { useRefs } from "./useRefs";
 import { Move } from "@/common/types/socketTypes";
 import { DEFAULT_MOVE } from "@/common/constants";
+import { useOptionsValue } from "@/common/redux/options";
 
 let tempSelection = {
   x: 0,

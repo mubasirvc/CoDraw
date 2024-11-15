@@ -1,8 +1,8 @@
 import { FaRedo, FaUndo } from "react-icons/fa";
-import { useMyMoves } from "@/common/recoil/room";
 import { useRefs } from "../../hooks/useRefs";
-import { useSavedMoves } from "@/common/recoil/savedMoves/savedMoves.hooks";
 import ImageChoser from "./ImageChoser";
+import { useMyMoves } from "@/common/redux/room";
+import { useSavedMoves } from "@/common/redux/savedMoves/savedMoves.hooks";
 
 const LeftToolbar = () => {
   const { redoRef, undoRef } = useRefs();

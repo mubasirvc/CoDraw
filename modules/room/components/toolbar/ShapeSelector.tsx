@@ -4,9 +4,9 @@ import { BiRectangle } from "react-icons/bi";
 import { BsCircle } from "react-icons/bs";
 import { CgShapeZigzag } from "react-icons/cg";
 import { useClickAway } from "react-use";
-import { useOptions } from "@/common/recoil/options";
 import { Shape } from "@/common/types/socketTypes";
 import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
+import { useOptions } from "@/common/redux/options";
 
 const ShapeSelector = () => {
   const [options, setOptions] = useOptions();
@@ -16,10 +16,10 @@ const ShapeSelector = () => {
   useClickAway(ref, () => setOpened(false));
 
   const handleShapeChange = (shape: Shape) => {
-    setOptions((prev) => ({
-      ...prev,
+    setOptions({
+      ...options,
       shape,
-    }));
+    });
     setOpened(false);
   };
 

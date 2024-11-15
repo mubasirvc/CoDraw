@@ -1,5 +1,5 @@
 import { socket } from '@/common/lib/socket'
-import { useSetRoomId } from '@/common/recoil/room'
+import { useSetRoomId } from '@/common/redux/room'
 import { useRouter } from 'next/router'
 import React, { FormEvent, useEffect, useState } from 'react'
 
