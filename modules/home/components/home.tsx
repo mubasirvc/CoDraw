@@ -1,102 +1,13 @@
-import { socket } from '@/common/lib/socket'
-import { useSetRoomId } from '@/common/redux/room'
-import { useRouter } from 'next/router'
-import React, { FormEvent, useEffect, useState } from 'react'
+import RoomJoinForm from '@/modules/home/components/RoomJoinForm'
+import React from 'react'
 import { BsCursor } from "react-icons/bs"
 
 const Home = () => {
-  const [roomId, setRoomId] = useState('')
-  const [username, setUsername] = useState('')
-  const setAtomRoomId = useSetRoomId()
-
-  const router = useRouter()
-
-  useEffect(() => {
-    socket.on("created", (roomId) => {
-      setAtomRoomId(roomId)
-      router.push(roomId)
-    })
-
-    const handlelJoinedRoom = (roomId: string, isFailed?: boolean) => {
-      if (!isFailed) {
-        setAtomRoomId(roomId)
-        router.push(roomId)
-      }
-      //handle modal for room not found
-      else console.log('failed to  join room');
-    }
-
-    socket.on("joined", handlelJoinedRoom)
-
-    return () => {
-      socket.off("created")
-      socket.off("joined", handlelJoinedRoom)
-    }
-  }, [router, setAtomRoomId, router, roomId])
-
-  useEffect(() => {
-    socket.emit("leave_room")
-    setAtomRoomId("")
-  }, [setAtomRoomId])
-
-  const handleCreateRoom = () => {
-    socket.emit("create_room", username)
-  }
-
-  const handleJoinRoom = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (roomId) socket.emit("join_room", roomId, username)
-  }
 
   return (
     <>
-      {/* <div className='flex flex-col items-center'>
-        <h1 className='mt-24 text-xl font-extrabold leading-tight'>
-          CoDraw
-        </h1>
-        <h3 className='text-2xl'> Real time whiteboard</h3>
-        <div className='mt-10 flex flex-col gap-2'>
-          <label htmlFor="username" className='self-start font-bold leading-tight'>
-            Enter Username
-          </label>
-          <input
-            className='rounded-xl border p-5 py-1'
-            id='username'
-            placeholder='Enter username'
-            value={username}
-            onChange={(e) => setUsername(e.target.value.slice(0, 15))}
-            type="text"
-          />
-        </div>
-
-        <form className='flex flex-col items-center gap-3'
-          onSubmit={handleJoinRoom}>
-          <label htmlFor="room-id" className='self-start font-bold leading-tight'>
-            Enter room id
-          </label>
-          <input
-            className='rounded-xl border p-5 py-1'
-            id='root-id'
-            placeholder='Enter room id'
-            value={roomId}
-            onChange={(e) => setRoomId(e.target.value)}
-            type="text"
-          />
-          <button type='submit'> Join</button>
-        </form>
-        <p className='my-3'>or</p>
-        <div className='mt-8 flex flex-col items-center gap-2'>
-          <h5 className='self-start font-bold leading-tight '>
-            Create new room
-          </h5>
-          <button onClick={handleCreateRoom}> Create room</button>
-        </div>
-      </div> */}
-
-
       <div
-        className="relative flex flex-1 h-screen w-full flex-col items-center justify-center text-center px-4 py-20 bg-gradient-to-r from-blue-50/50 via-indigo-50 to-blue-50/50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 overflow-hidden"
+        className="relative flex flex-1 min-h-[626px] w-full flex-col items-center justify-center text-center px-4 py-20 bg-gradient-to-r from-blue-50/50 via-indigo-50 to-blue-50/50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 overflow-hidden"
       >
         {/* Hand-Drawn Shapes */}
         <svg
@@ -123,13 +34,6 @@ const Home = () => {
             className="transition-all duration-300 ease-in-out"
           />
         </svg>
-
-        {/* Main Content */}
-        {/* <p
-          className="border border-blue-700 dark:border-gray-300 rounded-lg py-2 px-4 text-blue-400 dark:text-gray-300 text-sm mb-5 transition duration-300 ease-in-out hover:text-gray-500 dark:hover:text-gray-400"
-        >
-          Collaborate and Create Together
-        </p> */}
         <h1 className="mx-auto max-w-4xl font-display text-5xl font-bold tracking-normal text-blue-600 dark:text-gray-300 sm:text-7xl">
           Transform <span className="relative whitespace-nowrap">Your Creativity</span>
           <span className="relative whitespace-nowrap text-orange-500 dark:text-orange-300">
@@ -149,23 +53,8 @@ const Home = () => {
           in real-time. Our platform empowers creativity and communication in an
           immersive environment.
         </h2>
-        <h2 className="mx-auto mt-8  max-w-xl text-2xl text-blue-600 dark:text-gray-300 leading-7">
-         Get Started!
-        </h2>
-        <div className="flex gap-2 z-50">
-          <button
-            className="bg-orange-600 dark:bg-gray-800 rounded-xl text-white dark:text-gray-300 font-medium px-4 py-3 sm:mt-5 mt-4 hover:bg-orange-500 dark:hover:bg-gray-600 transition"
-            onClick={handleCreateRoom}
-
-          >
-            Start a New Room
-          </button>
-          <button
-            className="bg-orange-600 dark:bg-gray-800 rounded-xl text-white dark:text-gray-300 font-medium px-4 py-3 sm:mt-5 mt-4 hover:bg-orange-500 dark:hover:bg-gray-600 transition"
-            onClick={() => { console.log('room') }}
-          >
-            Join an Existing Room
-          </button>
+        <div className='mt-5 z-10'>
+          <RoomJoinForm />
         </div>
 
         {/* User Cursors */}
