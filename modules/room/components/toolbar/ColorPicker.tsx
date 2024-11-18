@@ -20,7 +20,7 @@ const ColorPicker = () => {
   return (
     <div className="" ref={ref}>
       <button
-       className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center"
+       className="w-10 h-10 flex justify-center items-center"
         disabled={options.mode === "select"}
         onClick={() => setOpened(!opened)}
       >

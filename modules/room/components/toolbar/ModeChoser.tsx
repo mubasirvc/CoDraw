@@ -30,7 +30,7 @@ const ModeChoser = () => {
   return (
     <div className="" ref={drewingBtnRef}>
       <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center"
+        className="w-10 h-10 flex justify-center items-center"
         onClick={() => setOpened((prev) => !prev)}
       >
         {options.mode === "draw" && <BsPencilFill />}
@@ -42,33 +42,33 @@ const ModeChoser = () => {
       <AnimatePresence>
         {opened && (
           <motion.div
-            className="absolute mt-3 z-10 flex gap-3 rounded-lg border bg-zinc-900 p-2 md:border-0"
+            className="absolute mt-3 z-10 flex gap-4 rounded-lg border bg-[#333] p-3 md:border-0"
             variants={ColorPickerAnimation}
             initial="from"
             animate="to"
             exit="from"
           >
             <button
-              className={`text-xl ${options.mode === "draw" && "text-green-400"}`}
+              className={`${options.mode === "draw" && "text-green-400"}`}
               onClick={() => handleModeChange('draw')}
             >
               <BsPencilFill />
             </button>
             <button
-              className={`text-xl ${options.mode === "type" && "text-green-400"}`}
+              className={` ${options.mode === "type" && "text-green-400"}`}
               onClick={() => handleModeChange('type')}
             >
               <PiTextAaBold />
             </button>
 
             <button
-              className={`text-xl ${options.mode === "eraser" && "text-green-400"}`}
+              className={` ${options.mode === "eraser" && "text-green-400"}`}
               onClick={() => handleModeChange('eraser')}
             >
               <FaEraser />
             </button>
             <button
-              className={`text-2xl ${options.mode === "select" && "text-green-400"}`}
+              className={` ${options.mode === "select" && "text-green-400"}`}
               onClick={() => handleModeChange('select')}
             >
               <AiOutlineSelect />

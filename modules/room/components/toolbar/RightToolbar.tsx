@@ -29,19 +29,19 @@ const RightToolbar = () => {
   };
 
   return (
-    <div className=' flex gap-2 text-white'>
+    <div className='flex text-white'>
       <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center" onClick={() => { }}
+        className="w-10 h-10 flex justify-center items-center " onClick={() => { }}
       >
         <IoIosShareAlt />
       </button>
       <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center" onClick={handleDownload}
+        className="w-10 h-10 flex justify-center items-center " onClick={handleDownload}
       >
         <HiOutlineDownload />
       </button>
       <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center" onClick={handleExit}
+        className="w-10 h-10 flex justify-center items-center " onClick={handleExit}
       >
         <ImExit />
       </button>
