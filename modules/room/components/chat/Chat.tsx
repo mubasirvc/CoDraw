@@ -44,22 +44,22 @@ const Chat = () => {
 
   return (
     <motion.div
-      className={`${opened ? 'h-[60%]' : 'h-14 w-14'} fixed right-5 bottom-2 z-50 flex flex-col overflow-hidden transition-all`}
+      className={`${opened ? 'h-[80%]' : 'h-14 w-14'} fixed right-5 bottom-2 z-50 flex flex-col overflow-hidden transition-all`}
       animate={{
-        height: opened ? "60%" : "3.5rem",
+        height: opened ? "80%" : "3.5rem",
         width: opened ? "25%" : "3.5rem",
         borderRadius: "0.5rem",
       }}
       transition={{ ease: DEFAULT_EASE, duration: 0.3 }}
     >
       <button
-        className={`flex ${opened ? 'justify-between w-full' : 'justify-center'} cursor-pointer items-center gap-1 bg-zinc-900 py-2 px-2 font-semibold text-white`}
+        className={`flex ${opened ? 'text-[#D4D4D4] justify-between w-full border-b-0' : 'justify-center'} cursor-pointer items-center gap-1 border border-[#3C3C3C] bg-[#252526] py-2 px-2 font-semibold text-white`}
         onClick={() => {
           setOpened((prev) => !prev);
           setNewMsg(false);
         }}
         style={{
-          borderRadius: "0.5rem",
+          borderRadius: opened ? "0.5rem 0.5rem 0 0" : "0.5rem",
         }}
       >
         <motion.div
@@ -68,9 +68,10 @@ const Chat = () => {
         >
           <FaChevronUp className='opacity-80 text-sm' />
         </motion.div>
+        {opened && 'Chat'}
         {opened ? (
           <>
-            <div className="flex items-center gap-2 text-2xl">
+            <div className="flex items-center gap-2 text-2xl text-[#D4D4D4]">
               {newMsg ? (
                 <motion.div
                   initial={{ scale: 1 }}
@@ -114,7 +115,7 @@ const Chat = () => {
       </button>
 
       {opened && (
-        <div className="flex flex-1 flex-col justify-between bg-gray-100 p-3 rounded-b-md">
+        <div className="flex flex-1 flex-col justify-between border border-[#3C3C3C] bg-[#252526] p-3 rounded-b-md">
           <div className={`flex-1 overflow-y-scroll pr-2`} ref={msgListRef}>
             {msgs.map((msg) => (
               <ChatMessage key={msg.id} {...msg} />

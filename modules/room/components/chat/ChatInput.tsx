@@ -15,14 +15,18 @@ const ChatInput = () => {
   return (
     <form className='flex w-full items-center' onSubmit={handleSubmit}>
       <input
-        className='w-full rounded-s-xl border border-zinc-300 p-5 py-1 h-10'
+        className="w-full rounded-s-xl text-[#D4D4D4] bg-[#3C3C3C] p-5 py-1 h-10 border border-transparent focus:border-[#D4D4D4] outline-none transition-colors duration-200"
         type="text"
         value={msg}
         onChange={(e) => setMsg(e.target.value)}
       />
-      <button className='h-full w-10 border-2 border-l-0 rounded-r-xl' type='submit'>
-        <FiSend className='pl-2 text-2xl'/>
+      <button
+        className="flex justify-center items-center text-[#D4D4D4] h-full w-12 border-l border-gray-600 bg-[#3C3C3C] rounded-r-xl transition-colors duration-200 hover:bg-[#505050] hover:text-white"
+        type="submit"
+      >
+        <FiSend className="text-md transition-transform duration-200 hover:scale-110" />
       </button>
+
     </form>
   )
 }
