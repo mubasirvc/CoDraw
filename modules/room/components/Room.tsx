@@ -10,6 +10,7 @@ import MoveImage from './board/MoveImage'
 import SelectionBtns from './board/SelctionBtns'
 import { useRoom } from '@/common/redux/room'
 import Toolbar from './toolbar/Toolbar'
+import MyAudio from './toolbar/MyAudio'
 
 const Room = () => {
   const room = useRoom()
@@ -27,6 +28,7 @@ const Room = () => {
         <MouseRender />
         <Chat />
         <Toolbar />
+        <MyAudio />
       </div>
     </RoomContextProvider>
   )
