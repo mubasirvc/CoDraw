@@ -13,12 +13,18 @@ const UndoRedoBtn = () => {
   return (
     <div className="flex text-white ">
       <button
-        className={`${!savedMoves.length && 'opacity-40'}  w-10 h-10 flex justify-center items-center`}
+        data-tooltip-target="tooltip-bottom" data-tooltip-placement="bottom"
+        className={`${!savedMoves.length && 'opacity-40'}  w-10 h-10 flex justify-center items-center `}
         ref={redoRef}
         disabled={!savedMoves.length}
       >
         <LuRedo />
       </button>
+      <div id="tooltip-bottom" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
+        redo
+        <div className="tooltip-arrow" data-popper-arrow></div>
+      </div>
+
       <button
         className={`${!myMoves.length && 'opacity-40'} w-10 h-10 flex justify-center items-center`}
         ref={undoRef}
