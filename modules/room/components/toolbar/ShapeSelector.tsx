@@ -7,6 +7,7 @@ import { useClickAway } from "react-use";
 import { Shape } from "@/common/types/socketTypes";
 import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
 import { useOptions } from "@/common/redux/options";
+import Tooltip from "./Tooltip";
 
 const ShapeSelector = () => {
   const [options, setOptions] = useOptions();
@@ -25,16 +26,17 @@ const ShapeSelector = () => {
 
   return (
     <div className="relative inline-block" ref={ref}>
-      <button
-        className=" w-10 h-10 flex justify-center items-center"
-        onClick={() => setOpened((prev) => !prev)}
-        disabled={options.mode === "select"}
-      >
-        {options.shape === "circle" && <BsCircle />}
-        {options.shape === "rect" && <BiRectangle />}
-        {options.shape === "line" && <CgShapeZigzag />}
-      </button>
-
+      <Tooltip title="shape">
+        <button
+          className=" w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full"
+          onClick={() => setOpened((prev) => !prev)}
+          disabled={options.mode === "select"}
+        >
+          {options.shape === "circle" && <BsCircle />}
+          {options.shape === "rect" && <BiRectangle />}
+          {options.shape === "line" && <CgShapeZigzag />}
+        </button>
+      </Tooltip>
       <AnimatePresence>
         {opened && (
           <motion.div

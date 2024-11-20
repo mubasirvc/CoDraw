@@ -7,6 +7,7 @@ import { FaEraser } from "react-icons/fa";
 import { PiTextAaBold } from "react-icons/pi";
 import { AiOutlineSelect } from "react-icons/ai";
 import { useOptions } from "@/common/redux/options";
+import Tooltip from "./Tooltip";
 
 
 const ModeChoser = () => {
@@ -29,16 +30,17 @@ const ModeChoser = () => {
 
   return (
     <div className="" ref={drewingBtnRef}>
-      <button
-        className="w-10 h-10 flex justify-center items-center"
-        onClick={() => setOpened((prev) => !prev)}
-      >
-        {options.mode === "draw" && <BsPencilFill />}
-        {options.mode === "eraser" && <FaEraser />}
-        {options.mode === "select" && <AiOutlineSelect />}
-        {options.mode === "type" && <PiTextAaBold />}
-      </button>
-
+      <Tooltip title="mode">
+        <button
+          className="w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full"
+          onClick={() => setOpened((prev) => !prev)}
+        >
+          {options.mode === "draw" && <BsPencilFill />}
+          {options.mode === "eraser" && <FaEraser />}
+          {options.mode === "select" && <AiOutlineSelect />}
+          {options.mode === "type" && <PiTextAaBold />}
+        </button>
+      </Tooltip>
       <AnimatePresence>
         {opened && (
           <motion.div

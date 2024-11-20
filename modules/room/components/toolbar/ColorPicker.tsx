@@ -5,6 +5,7 @@ import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
 import { BsPaletteFill } from "react-icons/bs";
 import { useOptions } from "@/common/redux/options";
 import ColorPicker from "react-best-gradient-color-picker";
+import Tooltip from "./Tooltip";
 
 const GradientColorPicker = () => {
   const [options, setOptions] = useOptions();
@@ -15,13 +16,15 @@ const GradientColorPicker = () => {
 
   return (
     <div className="" ref={ref}>
-      <button
-        className="w-4 h-4 flex justify-center items-center mx-2"
-        disabled={options.mode === "select"}
-        onClick={() => setOpened(!opened)}
-      >
-        <img src="/images/color-wheel.png" alt="colorpicker" />
-      </button>
+      <Tooltip title="color picker">
+        <button
+          className="w-8 h-8 flex justify-center items-center  hover:bg-[#3C3C3C] rounded-full"
+          disabled={options.mode === "select"}
+          onClick={() => setOpened(!opened)}
+        >
+          <img className="w-4 h-4 " src="/images/color-wheel.png" alt="colorpicker" />
+        </button>
+      </Tooltip>
       <AnimatePresence>
         {opened && (
           <motion.div
@@ -33,7 +36,7 @@ const GradientColorPicker = () => {
           >
             <ColorPicker
               hideInputs
-              hideControls	
+              hideControls
               width={220}
               height={220}
               value={rgbaToCssString(options.lineColor)}

@@ -12,14 +12,16 @@ import ImageChoser from './ImageChoser';
 const Toolbar = () => {
   return (
     <div className='flex justify-center'>
-      <div className="top-1 fixed w-auto rounded-lg border-[#3C3C3C] bg-[#252526] py-1 px-2 h-auto border flex items-center justify-center flex-wrap text-[#D4D4D4]">
+      <div className="top-1 fixed w-auto rounded-lg border-[#3C3C3C] bg-[#252526] py-2 px-3 h-auto border flex items-center justify-center flex-wrap text-[#D4D4D4]">
         <UndoRedoBtn />
         <ImageChoser />
         <div className='border mx-2 opacity-30 h-6'/>
+        <div className='flex gap-2'>
         <ColorPicker />
         <LineWidthPicker />
         <ShapeSelector />
         <ModeChoser />
+        </div>
         <div className='border mx-2 opacity-30 h-6'/>
         <RightToolbar />
       </div>
