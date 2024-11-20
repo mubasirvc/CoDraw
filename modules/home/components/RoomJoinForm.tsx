@@ -1,48 +1,12 @@
-import { FC, ReactNode, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel } from '@headlessui/react'
-import { useRouter } from 'next/router'
-import { useSetRoomId } from '@/common/redux/room'
 import { socket } from '@/common/lib/socket'
 
-
-const RoomJoinForm = () => {
+const RoomJoinForm = ({ roomIdError, setRoomIdError }: { roomIdError: string; setRoomIdError: (val: string) => void }) => {
   const [open, setOpen] = useState(false)
   const [roomId, setRoomId] = useState('')
   const [username, setUsername] = useState('')
-  const [roomIdError, setRoomIdError] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const setReduxRoomId = useSetRoomId()
-
-  const router = useRouter()
-  
-  useEffect(() => {
-    socket.on("created", (roomId) => {
-      setReduxRoomId(roomId)
-      router.push(roomId)
-    })
-
-    const handlelJoinedRoom = (roomId: string, isFailed?: boolean) => {
-      setRoomIdError('')
-      if (!isFailed) {
-        setReduxRoomId(roomId)
-        router.push(roomId)
-      }
-      else setRoomIdError('RoomId not found!');
-    }
-
-    socket.on("joined", handlelJoinedRoom)
-
-    return () => {
-      socket.off("created")
-      socket.off("joined", handlelJoinedRoom)
-    }
-  }, [router, setReduxRoomId, router, roomId])
-
-  useEffect(() => {
-    socket.emit("leave_room")
-    setReduxRoomId("")
-  }, [setReduxRoomId])
 
   const handleCreateRoom = () => {
     setLoading(true)
@@ -122,7 +86,7 @@ const RoomJoinForm = () => {
                             className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                           >
                             Cancel
-                          </button> 
+                          </button>
                           {loading ? <p className='text-white ml-3 text-sm flex items-center'>Creating new room...</p> : (
                             <button
                               type="button"

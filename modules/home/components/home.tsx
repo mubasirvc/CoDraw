@@ -1,8 +1,43 @@
 import RoomJoinForm from '@/modules/home/components/RoomJoinForm'
-import React from 'react'
 import { BsCursor } from "react-icons/bs"
+import React, { FC, ReactNode, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useSetRoomId } from '@/common/redux/room'
+import { socket } from '@/common/lib/socket'
 
 const Home = () => {
+  const [roomIdError, setRoomIdError] = useState('')
+  const [roomId, setRoomId] = useState('')
+  const setReduxRoomId = useSetRoomId()
+  const router = useRouter()
+
+  useEffect(() => {
+    socket.on("created", (roomId) => {
+      setReduxRoomId(roomId)
+      router.push(roomId)
+    })
+
+    const handlelJoinedRoom = (roomId: string, isFailed?: boolean) => {
+      setRoomIdError('')
+      if (!isFailed) {
+        setReduxRoomId(roomId)
+        router.push(roomId)
+      }
+      else setRoomIdError('RoomId not found!');
+    }
+
+    socket.on("joined", handlelJoinedRoom)
+
+    return () => {
+      socket.off("created")
+      socket.off("joined", handlelJoinedRoom)
+    }
+  }, [router, setReduxRoomId, router, roomId])
+
+  useEffect(() => {
+    socket.emit("leave_room")
+    setReduxRoomId("")
+  }, [setReduxRoomId])
 
   return (
     <>
@@ -54,7 +89,10 @@ const Home = () => {
           immersive environment.
         </h2>
         <div className='mt-5 z-10'>
-          <RoomJoinForm />
+          <RoomJoinForm
+            roomIdError={roomIdError}
+            setRoomIdError={setRoomIdError}
+          />
         </div>
 
         {/* User Cursors */}
