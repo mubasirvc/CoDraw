@@ -7,7 +7,8 @@ const ChatInput = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
+    if(!msg.trim()) return 
+    
     socket.emit("send_msg", msg)
     setMsg('')
   }

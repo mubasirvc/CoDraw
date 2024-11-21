@@ -115,8 +115,9 @@ const Chat = () => {
       </button>
 
       {opened && (
-        <div className="flex flex-1 flex-col justify-between border border-[#3C3C3C] bg-[#252526] p-3 rounded-b-md">
-          <div className={`flex-1 overflow-y-scroll pr-2`} ref={msgListRef}>
+        <div className="flex flex-1 flex-col justify-between border border-[#3C3C3C] bg-[#252526] p-3 rounded-b-md z-50 h-10">
+          <div className={`flex-1 pr-2 overflow-y-scroll h-10`} ref={msgListRef}
+          >
             {msgs.map((msg) => (
               <ChatMessage key={msg.id} {...msg} />
             ))}

@@ -6,13 +6,17 @@ const ChatMessage = ({ userId, msg, username, color }: Message) => {
   const me = socket.id === userId
 
   return (
-    <div className={`text-[#D4D4D4] my-2 flex gap-2 text-clip ${me && 'justify-end text-right'}`}>
+    <div className={`text-[#D4D4D4] my-2 gap-2 flex text-clip ${me && 'justify-end text-right'}`}>
       {!me && (
-        <h5 style={{ color }} className='font-semibold rounded-full bg-[#3C3C3C] w-7 h-7 flex justify-center items-center'>
-          {username[0]}
-        </h5>
+        <div>
+          <div className='rounded-full bg-[#3C3C3C] w-7 h-7 flex justify-center items-center'>
+            <p style={{ color }} className=' text-sm mb-1'>
+              {username[0]}
+            </p>
+          </div>
+        </div>
       )}
-      <p style={{ wordBreak: 'break-all' }}>{msg}</p>
+      <p className={`${me ? 'bg-[#3C3C3C] ml-5' : 'border bg-[#D4D4D4] text-[#000] mr-3'} text-xs px-2 p-1 rounded-xl`} style={{ wordBreak: 'break-all' }}>{msg}</p>
     </div>
   )
 }
