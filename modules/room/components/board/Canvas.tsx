@@ -166,7 +166,7 @@ const Canvas = () => {
       {/* <MiniMap dragging={draging} /> */}
 
       <button
-        className={`fixed bottom-14 left-5 z-10 rounded-xl md:bottom-5 ${draging ? "bg-green-500" : "bg-zinc-300 text-black"
+        className={`fixed bottom-14 left-5 z-10 rounded-xl md:bottom-8  ${draging ? "bg-green-500" : "border-[#3C3C3C] border bg-[#252526] text-[#D4D4D4] opacity-50"
           } p-3 text-lg text-white`}
         onClick={() => setDraging((prev) => !prev)}
       >

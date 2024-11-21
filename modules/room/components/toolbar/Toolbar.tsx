@@ -6,6 +6,7 @@ import ShapeSelector from './ShapeSelector';
 import ModeChoser from './ModeChoser';
 import RightToolbar from './RightToolbar';
 import ImageChoser from './ImageChoser';
+import DrawBg from './DrawBg';
 
 const Toolbar = () => {
   return (
@@ -19,6 +20,7 @@ const Toolbar = () => {
         <LineWidthPicker />
         <ShapeSelector />
         <ModeChoser />
+        <DrawBg />
         </div>
         <div className='border mx-3 opacity-30 h-6'/>
         <RightToolbar />

@@ -44,7 +44,7 @@ const Chat = () => {
 
   return (
     <motion.div
-      className={`${opened ? 'h-[80%]' : 'h-14 w-14'} fixed right-5 bottom-2 z-50 flex flex-col overflow-hidden transition-all`}
+      className={`${opened ? 'h-[80%]' : 'h-14 w-14'} fixed right-5 bottom-3 z-50 flex flex-col overflow-hidden transition-all`}
       animate={{
         height: opened ? "80%" : "3.5rem",
         width: opened ? "25%" : "3.5rem",
