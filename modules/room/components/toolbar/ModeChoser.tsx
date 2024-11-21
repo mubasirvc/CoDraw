@@ -44,33 +44,33 @@ const ModeChoser = () => {
       <AnimatePresence>
         {opened && (
           <motion.div
-            className="absolute mt-3 z-10 flex gap-4 rounded-lg border bg-[#333] p-3 md:border-0"
+            className="absolute mt-5 z-10 flex gap-1 px-2 p-1 border-[#3C3C3C] bg-[#252526] rounded-lg border"
             variants={ColorPickerAnimation}
             initial="from"
             animate="to"
             exit="from"
           >
             <button
-              className={`${options.mode === "draw" && "text-green-400"}`}
+              className={`${options.mode === "draw" && "text-green-400"} hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center`}
               onClick={() => handleModeChange('draw')}
             >
               <BsPencilFill />
             </button>
             <button
-              className={` ${options.mode === "type" && "text-green-400"}`}
+              className={` ${options.mode === "type" && "text-green-400"} hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center`}
               onClick={() => handleModeChange('type')}
             >
               <PiTextAaBold />
             </button>
 
             <button
-              className={` ${options.mode === "eraser" && "text-green-400"}`}
+              className={` ${options.mode === "eraser" && "text-green-400"} hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center`}
               onClick={() => handleModeChange('eraser')}
             >
               <FaEraser />
             </button>
             <button
-              className={` ${options.mode === "select" && "text-green-400"}`}
+              className={` ${options.mode === "select" && "text-green-400"} hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center`}
               onClick={() => handleModeChange('select')}
             >
               <AiOutlineSelect />
