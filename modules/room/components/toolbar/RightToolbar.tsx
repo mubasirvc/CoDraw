@@ -6,6 +6,7 @@ import { IoIosShareAlt } from 'react-icons/io'
 import { useRefs } from '../../hooks/useRefs'
 import Router from 'next/router'
 import Tooltip from './Tooltip'
+import ShareBtns from '../ShareBtns'
 
 const RightToolbar = () => {
   const { canvasRef } = useRefs()
@@ -31,13 +32,7 @@ const RightToolbar = () => {
 
   return (
     <div className='flex gap-2'>
-      <Tooltip title="share">
-        <button
-          className="w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full" onClick={() => { }}
-        >
-          <IoIosShareAlt />
-        </button>
-      </Tooltip>
+      <ShareBtns />
       <Tooltip title="download">
         <button
           className="w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full " onClick={handleDownload}
