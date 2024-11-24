@@ -8,6 +8,7 @@ const DrawBg = () => {
   const ctx = useCtx();
 
   const drawBackground = () => {
+    setBg(true)
     if (ctx) {
       const dotSpacing = 25;
       const dotRadius = 1;
@@ -23,26 +24,26 @@ const DrawBg = () => {
     }
   };
 
-  const clearBackground = () => {
-    if (ctx) {
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    }
-  };
+  // const clearBackground = () => {
+  //   if (ctx) {
+  //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  //   }
+  // };
 
-  const toggleBackground = () => {
-    if (bg) {
-      clearBackground();
-    } else {
-      drawBackground();
-    }
-    setBg(!bg); // Toggle the state
-  };
+  // const toggleBackground = () => {
+  //   if (bg) {
+  //     clearBackground();
+  //   } else {
+  //     drawBackground();
+  //   }
+  //   setBg(!bg);
+  // };
 
   return (
-    <Tooltip title={bg ? 'clear' : 'background'}>
+    <Tooltip title={'background'}>
       <button
         className={`hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center`}
-        onClick={toggleBackground}
+        onClick={() => !bg && drawBackground()}
       >
         <PiDotsNine />
       </button>
