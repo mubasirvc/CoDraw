@@ -7,6 +7,7 @@ import { useClickAway } from "react-use";
 import { Shape } from "@/common/types/socketTypes";
 import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
 import { useOptions } from "@/common/redux/options";
+import Tooltip from "./Tooltip";
 
 const ShapeSelector = () => {
   const [options, setOptions] = useOptions();
@@ -24,46 +25,51 @@ const ShapeSelector = () => {
   };
 
   return (
-    <div className="relative inline-block" ref={ref}>
-      <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center"
-        onClick={() => setOpened((prev) => !prev)}
-        disabled={options.mode === "select"}
-      >
-        {options.shape === "circle" && <BsCircle />}
-        {options.shape === "rect" && <BiRectangle />}
-        {options.shape === "line" && <CgShapeZigzag />}
-      </button>
-
+    <div className="relative inline-block " ref={ref}>
+      <Tooltip title="shape">
+        <button
+          className=" w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full"
+          onClick={() => setOpened((prev) => !prev)}
+          disabled={options.mode === "select"}
+        >
+          {options.shape === "circle" && <BsCircle />}
+          {options.shape === "rect" && <BiRectangle />}
+          {options.shape === "line" && <CgShapeZigzag />}
+        </button>
+      </Tooltip>
       <AnimatePresence>
         {opened && (
           <motion.div
-            className="absolute transform mt-3 z-10 flex gap-3 rounded-lg border bg-zinc-900 p-2 md:border-0"
+            className="absolute transform px-2 gap-1 mt-5 z-10 flex border-[#3C3C3C] bg-[#252526] rounded-lg border p-1"
             variants={ColorPickerAnimation}
             initial="from"
             animate="to"
             exit="from"
           >
-            <button
-              className={`text-xl ${options.shape === "line" && "text-green-400"}`}
-              onClick={() => handleShapeChange("line")}
-            >
-              <CgShapeZigzag />
-            </button>
-
-            <button
-              className={`text-xl ${options.shape === "rect" && "text-green-400"}`}
-              onClick={() => handleShapeChange("rect")}
-            >
-              <BiRectangle />
-            </button>
-
-            <button
-              className={`text-xl ${options.shape === "circle" && "text-green-400"}`}
-              onClick={() => handleShapeChange("circle")}
-            >
-              <BsCircle />
-            </button>
+            <Tooltip title="line">
+              <button
+                className={`${options.shape === "line" && "text-green-400  " } hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center `}
+                onClick={() => handleShapeChange("line")}
+              >
+                <CgShapeZigzag />
+              </button>
+            </Tooltip>
+            <Tooltip title="rectangle">
+              <button
+                className={`${options.shape === "rect" && "text-green-400 "} hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center ` }
+                onClick={() => handleShapeChange("rect")}
+              >
+                <BiRectangle />
+              </button>
+            </Tooltip>
+            <Tooltip title="circle">
+              <button
+                className={`${options.shape === "circle" && "text-green-400 "} hover:bg-[#3C3C3C] rounded-full w-8 h-8 flex items-center justify-center ` }
+                onClick={() => handleShapeChange("circle")}
+              >
+                <BsCircle />
+              </button>
+            </Tooltip>
           </motion.div>
         )}
       </AnimatePresence>

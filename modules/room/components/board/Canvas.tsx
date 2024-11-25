@@ -11,8 +11,7 @@ import { useDraw } from '../../hooks/useDraw'
 import { useRefs } from '../../hooks/useRefs'
 import { useCtx } from '../../hooks/useCtx'
 import { BsArrowsMove } from 'react-icons/bs'
-import Audio from '../toolbar/Audio'
-import Toolbar from '../toolbar/Toolbar'
+import Audio from '../toolbar/MyAudio'
 
 const Canvas = () => {
   // const [inputVisible, setInputVisible] = useState(false);
@@ -106,7 +105,7 @@ const Canvas = () => {
 
 
   return (
-    <div className='relative h-full w-full overflow-hidden'>
+    <div className='relative h-full w-full overflow-hidden  bg-[#1E1E1E]'>
       <motion.canvas
         className={`top-0 z-10 ${draging && "cursor-move"}`}
         ref={canvasRef}
@@ -165,12 +164,9 @@ const Canvas = () => {
 
 
       {/* <MiniMap dragging={draging} /> */}
-      <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2">
-        <Audio />
-      </div>
 
       <button
-        className={`fixed bottom-14 left-5 z-10 rounded-xl md:bottom-5 ${draging ? "bg-green-500" : "bg-zinc-300 text-black"
+        className={`fixed bottom-14 left-5 z-10 rounded-xl md:bottom-8  ${draging ? "bg-green-500" : "border-[#3C3C3C] border bg-[#252526] text-[#D4D4D4] opacity-50"
           } p-3 text-lg text-white`}
         onClick={() => setDraging((prev) => !prev)}
       >

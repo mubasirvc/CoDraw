@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { BsBorderWidth } from "react-icons/bs";
 import { useClickAway } from "react-use";
 import { useOptions } from "@/common/redux/options";
+import Tooltip from "./Tooltip";
 
 const LineWidthPicker = () => {
   const [options, setOptions] = useOptions();
@@ -15,17 +16,19 @@ const LineWidthPicker = () => {
 
   return (
     <div className="" ref={ref}>
-      <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center"
-        onClick={() => setOpened(!opened)}
-        disabled={options.mode === "select"}
-      >
-        <BsBorderWidth />
-      </button>
+      <Tooltip title="line width">
+        <button
+          className="w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full"
+          onClick={() => setOpened(!opened)}
+          disabled={options.mode === "select"}
+        >
+          <BsBorderWidth />
+        </button>
+      </Tooltip>
       <AnimatePresence>
         {opened && (
           <motion.div
-            className="absolute mt-2 w-36"
+            className="absolute mt-3 w-36"
             initial="from"
             animate="to"
             exit="from"
@@ -41,7 +44,7 @@ const LineWidthPicker = () => {
                   lineWidth: parseInt(e.target.value, 10),
                 })
               }
-              className="h-4 w-full cursor-pointer appearance-none rounded-lg bg-gray-200"
+              className="h-4 w-full cursor-pointer appearance-none rounded-lg bg-gray-300"
             />
           </motion.div>
         )}

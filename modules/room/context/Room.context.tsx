@@ -60,17 +60,19 @@ const RoomContextProvider = ({ children }: { children: ReactNode }) => {
     })
 
     socket.on("new_user", (userId, username) => {
-      toast.info(`${username} has joined the room`, {
-        position: "top-center",
-        theme: 'colored'
+      toast(`${username} has joined the room`, {
+        position: "bottom-right",
+        theme: 'dark',
+        className: "text-xs w-48",
       })
       handleAddUser(userId, username)
     })
 
     socket.on("user_disconnected", userId => {
-      toast.info(`${users.get(userId)?.name || "Annonymous"} has left the room`, {
-        position: "top-center",
-        theme: 'colored'
+      toast(`${users.get(userId)?.name || "Annonymous"} has left the room`, {
+        position: "bottom-right",
+        theme: 'dark',
+        className: "text-xs w-48",
       })
       handleRemoveUser(userId)
     })

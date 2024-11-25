@@ -9,7 +9,7 @@ const UsersList = () => {
         return (
           <div
             key={userId}
-            className='flex h-8 w-8 select-none items-center justify-center rounded-full text-white'
+            className='flex h-8 w-8 select-none items-center justify-center rounded-full text-[#D4D4D4]'
             style={{
               backgroundColor: users.get(userId)?.color || "black",
               marginLeft: i !== 0 ? "-0.5rem" : 0

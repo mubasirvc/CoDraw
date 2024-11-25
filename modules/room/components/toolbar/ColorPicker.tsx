@@ -1,69 +1,53 @@
 import { useRef, useState } from "react";
-
 import { AnimatePresence, motion } from "framer-motion";
-import { RgbaColorPicker } from "react-colorful";
 import { useClickAway } from "react-use";
-
 import { ColorPickerAnimation } from "../../animations/ColorPicker.animation";
 import { BsPaletteFill } from "react-icons/bs";
 import { useOptions } from "@/common/redux/options";
+import ColorPicker from "react-best-gradient-color-picker";
+import Tooltip from "./Tooltip";
 
-const ColorPicker = () => {
+const GradientColorPicker = () => {
   const [options, setOptions] = useOptions();
-
   const ref = useRef<HTMLDivElement>(null);
-
   const [opened, setOpened] = useState(false);
 
   useClickAway(ref, () => setOpened(false));
 
   return (
     <div className="" ref={ref}>
-      <button
-       className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center"
-        disabled={options.mode === "select"}
-        onClick={() => setOpened(!opened)}
-      >
-        <BsPaletteFill />
-      </button>
+      <Tooltip title="color picker">
+        <button
+          className="w-8 h-8 flex justify-center items-center  hover:bg-[#3C3C3C] rounded-full"
+          disabled={options.mode === "select"}
+          onClick={() => setOpened(!opened)}
+        >
+          <img className="w-4 h-4 " src="/images/color-wheel.png" alt="colorpicker" />
+        </button>
+      </Tooltip>
       <AnimatePresence>
         {opened && (
           <motion.div
-            className="absolute pl-0 m-0 mt-3  flex"
+            className="absolute pl-0 m-0 mt-3 flex"
             variants={ColorPickerAnimation}
             initial="from"
             animate="to"
             exit="from"
           >
-            <h2 className="font-semibold text-black dark:text-white">
-              Line color
-            </h2>
-            <RgbaColorPicker
-              color={options.lineColor}
-              onChange={(e) => {
+            <ColorPicker
+              hideInputs
+              hideControls
+              width={220}
+              height={220}
+              value={rgbaToCssString(options.lineColor)}
+              onChange={(color) => {
                 setOptions({
                   ...options,
-                  lineColor: e,
+                  lineColor: cssStringToRgba(color),
                 });
               }}
               className="mb-5"
             />
-            {/* <h2 className="ml-3 font-semibold text-black dark:text-white">
-              Fill color
-            </h2>
-            <RgbaColorPicker
-              color={options.fillColor}
-              onChange={(e) => {
-                setOptions({
-                  ...options,
-                  fillColor: e,
-                });
-              }}
-            /> */}
-            {/* <RgbaColorPicker
-              color={options.lineColor}
-              onChange={(e) => setOptions((prev) => ({ ...prev, lineColor: e }))}
-            /> */}
           </motion.div>
         )}
       </AnimatePresence>
@@ -71,4 +55,23 @@ const ColorPicker = () => {
   );
 };
 
-export default ColorPicker;
+/**
+ * Converts an RgbaColor object to a CSS string.
+ */
+function rgbaToCssString(color: { r: number; g: number; b: number; a: number }): string {
+  return `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`;
+}
+
+/**
+ * Converts a CSS color string to an RgbaColor object.
+ */
+function cssStringToRgba(color: string): { r: number; g: number; b: number; a: number } {
+  const rgbaMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*(\d?.?\d+)?\)/);
+  if (rgbaMatch) {
+    const [, r, g, b, a = '1'] = rgbaMatch;
+    return { r: parseInt(r), g: parseInt(g), b: parseInt(b), a: parseFloat(a) };
+  }
+  throw new Error("Invalid color format");
+}
+
+export default GradientColorPicker;

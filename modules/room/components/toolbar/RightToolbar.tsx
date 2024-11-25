@@ -5,6 +5,8 @@ import { ImExit } from 'react-icons/im'
 import { IoIosShareAlt } from 'react-icons/io'
 import { useRefs } from '../../hooks/useRefs'
 import Router from 'next/router'
+import Tooltip from './Tooltip'
+import ShareBtns from '../ShareBtns'
 
 const RightToolbar = () => {
   const { canvasRef } = useRefs()
@@ -29,22 +31,22 @@ const RightToolbar = () => {
   };
 
   return (
-    <div className=' flex gap-2 text-white'>
-      <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center" onClick={() => { }}
-      >
-        <IoIosShareAlt />
-      </button>
-      <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center" onClick={handleDownload}
-      >
-        <HiOutlineDownload />
-      </button>
-      <button
-        className="text-lg rounded-full bg-[#333333] p-2 w-10 h-10 flex justify-center items-center" onClick={handleExit}
-      >
-        <ImExit />
-      </button>
+    <div className='flex gap-2'>
+      <ShareBtns />
+      <Tooltip title="download">
+        <button
+          className="w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full " onClick={handleDownload}
+        >
+          <HiOutlineDownload />
+        </button>
+      </Tooltip>
+      <Tooltip title="exit">
+        <button
+          className="w-8 h-8 flex justify-center items-center hover:bg-[#3C3C3C] rounded-full " onClick={handleExit}
+        >
+          <ImExit />
+        </button>
+      </Tooltip>
     </div>
   )
 }

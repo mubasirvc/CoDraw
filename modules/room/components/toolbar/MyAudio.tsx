@@ -56,7 +56,7 @@ const MyAudio = () => {
 
   return (
     <button
-      className="border-2 bg-[#333333] text-2xl rounded-full p-3 text-white"
+      className="fixed bottom-8 left-1/2 transform -translate-x-1/2 border border-[#3C3C3C] bg-[#252526] text-xl rounded-full p-3 text-[#D4D4D4]"
       onClick={toggleMic}
     >
       {isMicOn ? <IoMic /> : <IoMicOff />}
