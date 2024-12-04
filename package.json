@@ -7,7 +7,7 @@
     "build:frontend": "next build",
     "build:backend": "tsc -p tsconfig.server.json",
     "build": "npm run build:frontend && npm run build:backend",
-    "start": "node build/index.js",
+    "start": "node build/server/index.js",
     "lint": "next lint"
   },
   "dependencies": {
