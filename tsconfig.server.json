@@ -1,3 +1,15 @@
+// {
+//   "extends": "./tsconfig.json",
+//   "compilerOptions": {
+//     "module": "CommonJS",
+//     "outDir": "build",
+//     "target": "ES2017",
+//     "isolatedModules": false,
+//     "noEmit": false
+//   },
+//   "include": ["server", "../common/types"]
+// }
+
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
@@ -5,7 +17,10 @@
     "outDir": "build",
     "target": "ES2017",
     "isolatedModules": false,
-    "noEmit": false
+    "noEmit": false,
+    "esModuleInterop": true,
+    "strict": true
   },
-  "include": ["server", "../common/types"]
+  "include": ["server/**/*.ts", "../common/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

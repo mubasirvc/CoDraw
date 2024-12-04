@@ -3,9 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon server/index.ts",
-    "build": "next build && tsc -p ./server",
-    "start": "node server/index.js",
+    "dev": "nodemon --watch server server/index.ts",
+    "build:frontend": "next build",
+    "build:backend": "tsc -p tsconfig.server.json",
+    "build": "npm run build:frontend && npm run build:backend",
+    "start": "node build/index.js",
     "lint": "next lint"
   },
   "dependencies": {
