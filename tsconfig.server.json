@@ -14,13 +14,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "CommonJS",
-    "outDir": "build",
+    "outDir": "./build",  // Ensure compiled files are output to this folder
     "target": "ES2017",
     "isolatedModules": false,
-    "noEmit": false,
-    "esModuleInterop": true,
-    "strict": true
+    "noEmit": false
   },
-  "include": ["server/**/*.ts", "../common/types/**/*.ts"],
+  "include": ["server/**/*.ts", "../common/types/**/*.ts"], // Include backend files
   "exclude": ["node_modules"]
 }
+
