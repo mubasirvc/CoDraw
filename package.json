@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon server/index.ts",
-    "build": "next build",
+    "build": "next build && tsc -p ./server",
     "start": "node server/index.js",
     "lint": "next lint"
   },
