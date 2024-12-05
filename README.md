@@ -47,7 +47,7 @@ Follow these steps to run CoDraw locally:
 ### Steps:
 1. **Clone the Repository**:
    ```bash
-   git clone <git@github.com:mubasirvc/CoDraw.git>
+   git clone git@github.com:mubasirvc/CoDraw.git
    cd codraw
    
 2. **Install Dependencies:**:
