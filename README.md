@@ -127,17 +127,18 @@ Follow these steps to run CoDraw locally:
 
 ## Screenshots
 
-![Screenshot 1](screenshots/Screenshot1.png)
+![Screenshot 1](/screenshots/Screenshot1.png)
 *Creating a drawing*
 
-![Screenshot 2](creenshots/Screenshot2.png)
+![Screenshot 2](/screenshots/Screenshot2.png)
 *Real-time collaboration in action*
 
-![Screenshot 3](creenshots/Screenshot3.png)
+![Screenshot 3](/screenshots/Screenshot3.png)
 *User interface with chat and voice options*
 
-![Screenshot 4](creenshots/Screenshot4.png)
+![Screenshot 4](/screenshots/Screenshot4.png)
 *User interface with chat and voice options*
+
 
 ---
 
