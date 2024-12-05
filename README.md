@@ -127,18 +127,17 @@ Follow these steps to run CoDraw locally:
 
 ## Screenshots
 
-![Screenshot 1](/public/screenshots/ss1.png)
-*Creating a drawing click on get start button*
+![Screenshot 1](/screenshots/ss1.png)
+*Creating a drawing: Click on the "Get Started" button.*
 
-![Screenshot 2](/public/screenshots/ss2.png)
-*add user name, if you want to join in an existin room enter room id and and join*
+![Screenshot 2](/screenshots/ss2.png)
+*Add your username. To join an existing room, enter the room ID and click "Join".*
 
-![Screenshot 3](/public/screenshots/ss3.png)
-*canvas will open you can draw here*
+![Screenshot 3](/screenshots/ss3.png)
+*The canvas will open where you can start drawing.*
 
-![Screenshot 4](/public/screenshots/ss4.png)
-*Shar link with friends, draw togather and chat and talk..*
-
+![Screenshot 4](/screenshots/ss4.png)
+*Share the link with friends to draw together, chat, and talk.*
 
 ---
 
