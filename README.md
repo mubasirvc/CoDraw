@@ -72,7 +72,6 @@ Follow these steps to run CoDraw locally:
 
 ## Project Structure
 
-├── .next                # Auto-generated build files (Next.js)
 ├── node_modules         # Installed dependencies
 ├── public               # Static assets like images, fonts, etc.
 ├── styles               # Global and scoped CSS/Tailwind styles
@@ -128,13 +127,16 @@ Follow these steps to run CoDraw locally:
 
 ## Screenshots
 
-![Screenshot 1](assets/screenshots/screenshot1.png)
+![Screenshot 1](screenshots/Screenshot1.png)
 *Creating a drawing*
 
-![Screenshot 2](assets/screenshots/screenshot2.png)
+![Screenshot 2](creenshots/Screenshot2.png)
 *Real-time collaboration in action*
 
-![Screenshot 3](assets/screenshots/screenshot3.png)
+![Screenshot 3](creenshots/Screenshot3.png)
+*User interface with chat and voice options*
+
+![Screenshot 4](creenshots/Screenshot4.png)
 *User interface with chat and voice options*
 
 ---
