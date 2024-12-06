@@ -50,14 +50,19 @@ Follow these steps to run CoDraw locally:
    git clone git@github.com:mubasirvc/CoDraw.git
    cd codraw
    
-2. **Install Dependencies:**:
-  npm install
+2. Install dependencies:  
+   ```bash
+   npm install
 
-3. **Start the Development Server**:
-  npm run dev
+3. Start the development server:  
+   ```bash
+   npm run dev
 
 4. **Visit the App:**:
-  Open your browser and go to http://localhost:3000.
+  
+Open your browser and go to
+
+     http://localhost:3000.
 
 ---
 
